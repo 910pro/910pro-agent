@@ -10,9 +10,8 @@
     main { max-width: 640px; margin: 0 auto; padding: 32px 20px 64px; }
     h1 { font-size: 28px; margin: 0 0 6px; }
     p.sub { color:#9aa3ad; margin: 0 0 24px; }
-    a.pay { display:block; text-align:center; background:#7cff6b; color:#10210c; font-weight:700; text-decoration:none; padding:16px 18px; border-radius:12px; margin: 8px 0 28px; }
-    ul { list-style:none; padding:0; margin:0; }
-    li { display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #222831; }
+    a.pay { display:block; text-align:center; background:#7cff6b; color:#10210c; font-weight:700; text-decoration:none; padding:16px 18px; border-radius:12px; margin: 8px 0 20px; }
+    a.row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid #222831; color:#e8eaed; text-decoration:none; }
     .price { color:#7cff6b; font-variant-numeric: tabular-nums; }
     footer { margin-top:28px; color:#7a838c; font-size:13px; }
   </style>
@@ -20,19 +19,17 @@
 <body>
   <main>
     <h1>910pro</h1>
-    <p class="sub">Fayetteville / Cumberland County · mobile tech</p>
-    <a class="pay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Pay securely with Stripe</a>
-    <ul>
-      <li><span>Donate</span><span class="price">$1</span></li>
-      <li><span>IMEI Check</span><span class="price">$5</span></li>
-      <li><span>Basic Clean</span><span class="price">$10</span></li>
-      <li><span>Pro Clean</span><span class="price">$20</span></li>
-      <li><span>Deposit</span><span class="price">$25</span></li>
-      <li><span>HelpDesk</span><span class="price">$30</span></li>
-      <li><span>LCD</span><span class="price">$80</span></li>
-      <li><span>B2B</span><span class="price">$500</span></li>
-    </ul>
-    <footer>Live checkout. Add the service you need on the Stripe page. Diagnostics still handled in chat / text.</footer>
+    <p class="sub">Fayetteville / Cumberland County · tap a service to pay</p>
+    <a class="pay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Open full checkout</a>
+    <a class="row" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08"><span>Donate</span><span class="price">$1</span></a>
+    <a class="row" href="https://buy.stripe.com/14A6oI4Bl706fds8R43cc01"><span>IMEI Check</span><span class="price">$5</span></a>
+    <a class="row" href="https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02"><span>Basic Clean</span><span class="price">$10</span></a>
+    <a class="row" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03"><span>Pro Clean</span><span class="price">$20</span></a>
+    <a class="row" href="https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04"><span>Deposit</span><span class="price">$25</span></a>
+    <a class="row" href="https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05"><span>HelpDesk</span><span class="price">$30</span></a>
+    <a class="row" href="https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06"><span>LCD</span><span class="price">$80</span></a>
+    <a class="row" href="https://buy.stripe.com/14AcN69VFacid5kd7k3cc07"><span>B2B</span><span class="price">$500</span></a>
+    <footer>Live Stripe. Invoice + phone collected at checkout.</footer>
   </main>
 </body>
 </html>
