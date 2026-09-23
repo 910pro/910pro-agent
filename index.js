@@ -5,46 +5,43 @@ app.use(express.static('docs'));
 
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const PORT = process.env.PORT || 3000;
-const PAY_LINK = 'https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00';
+const BOOK_PAGE = 'https://910pro.github.io/910pro-agent/';
+const DEPOSIT_LINK = 'https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04';
 
-const SYSTEM_PROMPT = `You are the AI booking agent for 910pro — a mobile tech company in Fayetteville, NC. You respond to customer DMs on Facebook and Instagram.
+const SYSTEM_PROMPT = `You are the AI booking agent for 910pro — mobile device repair in Fayetteville, NC. You reply to Facebook and Instagram DMs.
 
-Personality: friendly, fast, confident, local. Keep replies SHORT — 2-4 sentences. This is a chat, not an email.
+Voice: short, local, human. 1-2 sentences. Never troubleshoot. Never stack options.
 
-LIVE STRIPE PRICES (do not invent others):
-- Donate: $1
-- IMEI Check: $5
-- Basic Clean: $10
-- Pro Clean: $20
-- Deposit: $25
-- HelpDesk: $30
-- LCD: $80
-- B2B: $500
+Intake only:
+1. If they have not given the device: "What model is your device?"
+2. If they have the device but not the issue: "No worries, what's wrong with it?"
+3. As soon as you have model + issue, STOP asking questions and send the page:
 
-PAY / BOOK LINK (always use this exact URL):
-${PAY_LINK}
+"Book here: ${BOOK_PAGE}\n$25 deposit. Book a screen here and the protector is free."
 
-HOW BOOKING WORKS:
-We come to YOU in Fayetteville / Cumberland County when the job is on-site. Ask: device, what's wrong, what part of town. Then send the pay link for deposit or the matching service.
+Do not quote a full price menu. Do not say LCD/OLED unless they ask. Do not say "hold" — say deposit. Do not say "screen jobs."
 
-RULES:
-- Never quote a price that is not in the list above
-- If unsure, say you'll confirm with the owner
-- If they sound frustrated, acknowledge that first
-- End with the pay link or one follow-up question
-- If you cannot help, say you'll get the owner` ;
+If they already sent model + issue in the first message, skip straight to the book-here line.
+
+If they only want IMEI / remote order, still send the page.
+
+If you are unsure or they are upset: acknowledge once, then send the page or say Greg will hit them back.`;
 
 app.get('/pay', (_req, res) => {
-  res.redirect(PAY_LINK);
+  res.redirect(DEPOSIT_LINK);
+});
+
+app.get('/book', (_req, res) => {
+  res.redirect(BOOK_PAGE);
 });
 
 app.post('/chat', async (req, res) => {
   const { message } = req.body;
-  if (!message) return res.json({ reply: 'Hey! What can I help you with?' });
+  if (!message) return res.json({ reply: 'What model is your device?' });
 
   if (!ANTHROPIC_KEY) {
     return res.json({
-      reply: `910pro — Fayetteville. Services from $5 IMEI check to $80 LCD. Deposit is $25. Pay here: ${PAY_LINK}`
+      reply: `Book here: ${BOOK_PAGE}\n$25 deposit. Book a screen here and the protector is free.`
     });
   }
 
@@ -58,18 +55,18 @@ app.post('/chat', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
+        max_tokens: 220,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: message }]
       })
     });
 
     const data = await response.json();
-    const reply = data.content?.[0]?.text || 'Let me get the owner on this for you!';
+    const reply = data.content?.[0]?.text || `Book here: ${BOOK_PAGE}`;
     res.json({ reply });
   } catch (err) {
     console.error(err);
-    res.json({ reply: `Something glitched — you can still pay here: ${PAY_LINK}` });
+    res.json({ reply: `Book here: ${BOOK_PAGE}` });
   }
 });
 
