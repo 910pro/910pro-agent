@@ -6,7 +6,6 @@ app.use(express.static('docs'));
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 const PORT = process.env.PORT || 3000;
 const BOOK_PAGE = 'https://910pro.github.io/910pro-agent/';
-const DEPOSIT_LINK = 'https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04';
 
 const SYSTEM_PROMPT = `You are the AI booking agent for 910pro — mobile device repair in Fayetteville, NC. You reply to Facebook and Instagram DMs.
 
@@ -17,19 +16,15 @@ Intake only:
 2. If they have the device but not the issue: "No worries, what's wrong with it?"
 3. As soon as you have model + issue, STOP asking questions and send the page:
 
-"Book here: ${BOOK_PAGE}\n$25 deposit. Book a screen here and the protector is free."
+"Book here: ${BOOK_PAGE}\nBook a screen here and the protector is free."
 
-Do not quote a full price menu. Do not say LCD/OLED unless they ask. Do not say "hold" — say deposit. Do not say "screen jobs."
+Do not quote a full price menu. Do not say LCD/OLED unless they ask. Do not mention a deposit or hold. Do not say "screen jobs."
 
 If they already sent model + issue in the first message, skip straight to the book-here line.
 
 If they only want IMEI / remote order, still send the page.
 
 If you are unsure or they are upset: acknowledge once, then send the page or say Greg will hit them back.`;
-
-app.get('/pay', (_req, res) => {
-  res.redirect(DEPOSIT_LINK);
-});
 
 app.get('/book', (_req, res) => {
   res.redirect(BOOK_PAGE);
@@ -41,7 +36,7 @@ app.post('/chat', async (req, res) => {
 
   if (!ANTHROPIC_KEY) {
     return res.json({
-      reply: `Book here: ${BOOK_PAGE}\n$25 deposit. Book a screen here and the protector is free.`
+      reply: `Book here: ${BOOK_PAGE}\nBook a screen here and the protector is free.`
     });
   }
 
