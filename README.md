@@ -1,21 +1,14 @@
 # 910pro-agent
 
-Live page (GitHub Pages, `/docs`):
+Live page after Pages is on:
 https://910pro.github.io/910pro-agent/
 
-$25 deposit:
-https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04
+## Turn Pages on (phone)
+1. Open this link:
+https://github.com/910pro/910pro-agent/settings/pages
+2. Under Build and deployment → Source pick **Deploy from a branch**
+3. Branch: **main**
+4. Folder: **/docs**
+5. Save
 
-## Turn Pages on (one time)
-Repo Settings → Pages → Deploy from a branch → `main` / `/docs` → Save.
-
-Then that URL is the main 910pro link for IG, Google, NFC, and ManyChat.
-
-## Chat agent
-```
-npm install
-ANTHROPIC_API_KEY=... npm start
-```
-
-POST `/chat` with `{ "message": "..." }`.
-After model + issue the agent sends the live page, not a long quote.
+Wait about a minute then open the live page.
