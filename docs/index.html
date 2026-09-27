@@ -27,6 +27,8 @@
     .item h2 { font-size:16px; } .item p { color:var(--muted); font-size:13px; margin-top:4px; }
     .row { display:flex; gap:8px; margin-top:12px; }
     .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; }
+    select { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
+    #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
     footer { text-align:center; margin-top:28px; color:var(--muted); font-size:12px; }
     footer a { color:var(--neon); }
     .social { display:flex; justify-content:center; gap:14px; margin:18px 0 10px; }
@@ -51,7 +53,34 @@
     </header>
     <a class="pay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Make a Payment</a>
     <section class="list">
-      <article class="item"><h2>Screen Repair</h2><p>Book here for a free screen protector</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
+      <article class="item" id="screen">
+        <h2>Screen Repair</h2>
+        <p>Pick your model LCD price shown then pay Book here for a free screen protector</p>
+        <select id="model" aria-label="iPhone model">
+          <option value="">Select iPhone model</option>
+          <option value="55">iPhone 7 / 8 / SE</option>
+          <option value="65">iPhone X / XR / XS / 11</option>
+          <option value="70">iPhone XS Max / 11 Pro / 11 Pro Max</option>
+          <option value="70b">iPhone 12 / 13</option>
+          <option value="80">iPhone 12 Pro / 12 Pro Max</option>
+          <option value="80b">iPhone 13 Pro / 13 Pro Max</option>
+          <option value="80c">iPhone 14 / 14 Plus</option>
+          <option value="80d">iPhone 15 / 15 Plus</option>
+          <option value="90">iPhone 14 Pro / 14 Pro Max</option>
+          <option value="90b">iPhone 16E</option>
+          <option value="100">iPhone 15 Pro / 15 Pro Max</option>
+          <option value="100b">iPhone 16 / 16 Plus</option>
+          <option value="110">iPhone 17</option>
+          <option value="130">iPhone 16 Pro / 16 Pro Max</option>
+          <option value="140">iPhone 17 Pro / 17 Pro Max</option>
+          <option value="200">iPhone Air</option>
+        </select>
+        <p id="screenPrice"></p>
+        <div class="row">
+          <a class="btn" id="screenPay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Pay</a>
+          <a class="btn" href="sms:9108491009">Book</a>
+        </div>
+      </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>Data Recovery</h2><p>Free data recovery when you donate the device</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>IMEI / Blacklist Check</h2><p>Check a device before you buy or sell</p><div class="row"><a class="btn" href="https://buy.stripe.com/14A6oI4Bl706fds8R43cc01">Order</a></div></article>
@@ -71,5 +100,21 @@
       <p>910pro · Fayetteville / Cumberland County</p>
     </footer>
   </div>
+  <script>
+    const PAY80 = 'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06';
+    const PAYANY = 'https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00';
+    const prices = { '55':55,'65':65,'70':70,'70b':70,'80':80,'80b':80,'80c':80,'80d':80,'90':90,'90b':90,'100':100,'100b':100,'110':110,'130':130,'140':140,'200':200 };
+    const model = document.getElementById('model');
+    const out = document.getElementById('screenPrice');
+    const pay = document.getElementById('screenPay');
+    function sync() {
+      const p = prices[model.value];
+      if (!p) { out.textContent = ''; pay.textContent = 'Pay'; pay.href = PAYANY; return; }
+      out.textContent = '$' + p;
+      pay.textContent = 'Pay $' + p;
+      pay.href = p === 80 ? PAY80 : PAYANY;
+    }
+    model.addEventListener('change', sync);
+  </script>
 </body>
 </html>
