@@ -26,10 +26,19 @@
     .item { background:var(--card); border:1px solid rgba(61,240,255,.22); padding:14px; text-align:center; }
     .item h2 { font-size:16px; } .item p { color:var(--muted); font-size:13px; margin-top:4px; }
     .row { display:flex; gap:8px; margin-top:12px; }
-    .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; }
+    .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; border:0; font-family:inherit; cursor:pointer; }
     select, input[type=text] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
     #otherWrap { display:none; }
     #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
+    #cal { display:none; margin-top:12px; text-align:left; }
+    #cal.open { display:block; }
+    .days, .slots { display:grid; gap:6px; margin-top:8px; }
+    .days { grid-template-columns:repeat(7,1fr); }
+    .slots { grid-template-columns:1fr 1fr; }
+    .day, .slot { background:#07121a; border:1px solid rgba(61,240,255,.28); color:var(--text); padding:8px 4px; font-size:11px; text-align:center; cursor:pointer; }
+    .day.on, .slot.on { border-color:var(--neon); box-shadow:0 0 12px rgba(61,240,255,.25); }
+    .day.work { opacity:.35; pointer-events:none; }
+    #calNote { margin-top:8px; color:var(--muted); font-size:12px; }
     footer { text-align:center; margin-top:28px; color:var(--muted); font-size:12px; }
     footer a { color:var(--neon); }
     .social { display:flex; justify-content:center; gap:14px; margin:18px 0 10px; }
@@ -40,14 +49,6 @@
 <body>
   <div class="wrap">
     <header>
-      <div class="brands" aria-label="Apple Android LG Motorola HP Windows">
-        <span title="Apple"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.2 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9s-1.8-.8-3.1-.8c-1.6.1-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.8 2.4 3.1 2.4 1.2-.1 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.1 3-2.3.9-1.3 1.3-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.9zm-2-7.6c.7-.8 1.1-1.9 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 .1.1 2.2-.4 2.9-1.4z"/></svg></span>
-        <span title="Android"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg></span>
-        <span title="LG"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M10.3 4.85A7.35 7.35 0 1 0 17.2 16.55" fill="none" stroke="#05070b" stroke-width="1.65" stroke-linecap="round"/><path d="M17.05 16.35H12.15" fill="none" stroke="#05070b" stroke-width="1.65" stroke-linecap="butt"/><path d="M11.35 7.7V16.35H15.55" fill="none" stroke="#05070b" stroke-width="1.7" stroke-linecap="butt" stroke-linejoin="miter"/><circle cx="8.95" cy="10.15" r="1.15" fill="#05070b"/></svg></span>
-        <span title="Motorola"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12C24.002 5.375 18.632.002 12.007 0H12zm7.327 18.065s-.581-2.627-1.528-4.197c-.514-.857-1.308-1.553-2.368-1.532-.745 0-1.399.423-2.2 1.553-.469.77-.882 1.573-1.235 2.403 0 0-.29-.675-.63-1.343a8.038 8.038 0 0 0-.605-1.049c-.804-1.13-1.455-1.539-2.2-1.553-1.049-.021-1.854.675-2.364 1.528-.948 1.574-1.528 4.197-1.528 4.197h-.864l4.606-15.12 3.56 11.804.024.021.024-.021 3.56-11.804 4.61 15.113h-.862z"/></svg></span>
-        <span title="HP"><svg class="icon" viewBox="-10 0 1014 1012" aria-hidden="true"><path fill="currentColor" d="m498 1012h-15l103-284h143q19 0 37-12.5t24-30.5l111-309q15-39-4.5-65.5t-59.5-26.5h-198l-164 457-94 258q-84-20-156-66-71-46-123.5-111t-81.5-146q-30-80-30-170 0-87 28-166 28-78 78-142t118-110 148-68l-96 266-163 442h107l137-376h81l-137 376h107l128-350q14-38-5-65t-59-27h-90l103-286h23q105 0 197 40t160.5 108.5 108.5 160.5 40 197-40 197-108.5 160.5-160.5 108.5-197 40zm305-662h-81l-113 310h81z"/></svg></span>
-        <span title="Windows"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 5.2 11.2 4.2v7.1H4V5.2zm8  -.8L20.4 3v8.3h-8.4V4.4zM4 12.7h7.2V20L4 18.9v-6.2zm8 .2h8.4V21l-8.4-1.2v-6.9z"/></svg></span>
-      </div>
       <div class="logo"><span class="logo-word"><span class="n">910</span><span class="p">pro</span></span></div>
       <p class="sub">Professional Mobile Device Repair 👨‍💻<br>Buy Sell Trade Electronics ♻️<br>Best Price Guarantee 🫡</p>
       <p class="hero-note"><a href="sms:9108491009">(910) 849-1009</a></p>
@@ -78,13 +79,17 @@
           <option value="200">iPhone Air</option>
           <option value="other">Type my model</option>
         </select>
-        <div id="otherWrap">
-          <input id="otherModel" type="text" placeholder="Type your model" autocomplete="off" />
-        </div>
+        <div id="otherWrap"><input id="otherModel" type="text" placeholder="Type your model" autocomplete="off" /></div>
         <p id="screenPrice"></p>
         <div class="row">
           <a class="btn" id="screenPay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Pay</a>
-          <a class="btn" id="screenBook" href="sms:9108491009">Book</a>
+          <button class="btn" type="button" id="screenBook">Book</button>
+        </div>
+        <div id="cal">
+          <p>Tap a day then an hour</p>
+          <div class="days" id="days"></div>
+          <div class="slots" id="slots"></div>
+          <p id="calNote">Work hours are blocked. Same hour can take more than one screen. 50% deposit locks the slot and the free protector.</p>
         </div>
       </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
@@ -97,11 +102,6 @@
       <article class="item"><h2>B2B / Shop Block</h2><p>Multiple devices arcade POS or fleet</p><div class="row"><a class="btn" href="https://buy.stripe.com/14AcN69VFacid5kd7k3cc07">Book</a></div></article>
     </section>
     <footer>
-      <div class="social">
-        <a href="https://www.facebook.com/910pro" target="_blank" rel="noopener" aria-label="Facebook @910pro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v2H6v4h3v8h4v-8h3.2L17 11h-4V9c0-.6.4-1 1-1z"/></svg></a>
-        <a href="https://www.instagram.com/910pro/" target="_blank" rel="noopener" aria-label="Instagram @910pro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm10 2H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-5 3.2A3.8 3.8 0 1 1 8.2 12 3.8 3.8 0 0 1 12 8.2zm0 2A1.8 1.8 0 1 0 13.8 12 1.8 1.8 0 0 0 12 10.2zM17.4 6.6a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg></a>
-        <a href="https://www.tiktok.com/@910pro" target="_blank" rel="noopener" aria-label="TikTok @910pro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 3c.4 2.5 1.8 4.3 4.3 4.6v2.4c-1.5 0-2.9-.5-4.1-1.3v6.6c0 3.3-2.6 5.7-5.8 5.7S3 18.6 3 15.3s2.6-5.7 5.8-5.7c.3 0 .6 0 .9.1v2.6c-.3-.1-.6-.1-.9-.1-1.8 0-3.2 1.4-3.2 3.1S5.9 18.5 7.7 18.5s3.2-1.4 3.2-3.1V3h3.6z"/></svg></a>
-      </div>
       <p><a href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08">Tip jar</a></p>
       <p>910pro · Fayetteville / Cumberland County</p>
     </footer>
@@ -116,16 +116,27 @@
     const out = document.getElementById('screenPrice');
     const pay = document.getElementById('screenPay');
     const book = document.getElementById('screenBook');
+    const cal = document.getElementById('cal');
+    const daysEl = document.getElementById('days');
+    const slotsEl = document.getElementById('slots');
+    const calNote = document.getElementById('calNote');
+    let currentPrice = null, pickedDay = null, pickedSlot = null;
+    function label(h){ const end = h+1; const a = h>12?h-12:h; const b = end>12?end-12:end; const ap = h>=12?'pm':'am'; const bp = end>=12?'pm':'am'; return a+ap+'–'+b+bp; }
+    function hoursFor(d){
+      const day = d.getDay();
+      if (day===0 || day===6) return [10,11,12,13,14,15,16,17,18];
+      if (day===1 || day===2) return [16,17,18,19];
+      return [17,18,19];
+    }
+    function jobPrice(){
+      if (model.value==='other') return guess(otherModel.value);
+      return prices[model.value] || null;
+    }
+    function deposit(){ const p = jobPrice(); return p ? Math.round(p/2) : null; }
     function setPay(p, note) {
-      if (p) {
-        out.textContent = '$' + p;
-        pay.textContent = 'Pay $' + p;
-        pay.href = p === 80 ? PAY80 : PAYANY;
-      } else {
-        out.textContent = note || '';
-        pay.textContent = 'Pay';
-        pay.href = PAYANY;
-      }
+      currentPrice = p || null;
+      if (p) { out.textContent = '$'+p; pay.textContent = 'Pay $'+p; pay.href = p===80 ? PAY80 : PAYANY; }
+      else { out.textContent = note || ''; pay.textContent = 'Pay'; pay.href = PAYANY; }
     }
     function guess(text) {
       const t = (text || '').toLowerCase();
@@ -150,17 +161,48 @@
     function sync() {
       const isOther = model.value === 'other';
       otherWrap.style.display = isOther ? 'block' : 'none';
-      if (isOther) {
-        const typed = otherModel.value.trim();
-        const p = guess(typed);
-        setPay(p, typed ? 'Text this model to book' : '');
-        book.href = typed ? 'sms:9108491009?body=' + encodeURIComponent(typed + ' screen') : 'sms:9108491009';
-        return;
-      }
-      otherModel.value = '';
-      book.href = 'sms:9108491009';
-      setPay(prices[model.value] || null, '');
+      if (isOther) setPay(guess(otherModel.value), otherModel.value.trim() ? 'Text this model to book' : '');
+      else setPay(prices[model.value] || null, '');
+      updateNote();
     }
+    function updateNote(){
+      const dep = deposit();
+      const when = pickedDay && pickedSlot!=null ? pickedDay.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+' '+label(pickedSlot) : '';
+      if (when && dep) {
+        calNote.textContent = when+' · $'+dep+' deposit locks this hour and the free protector. Same hour can take more than one screen.';
+        pay.textContent = 'Pay $'+dep+' deposit';
+        pay.href = PAYANY;
+      } else {
+        calNote.textContent = 'Work hours are blocked Mon-Tue 9-4 Wed-Fri 9-5. Weeknights and weekends open. 50% deposit locks the slot and the free protector.';
+      }
+    }
+    function drawDays(){
+      daysEl.innerHTML = '';
+      const start = new Date(); start.setHours(0,0,0,0);
+      for (let i=0;i<14;i++){
+        const d = new Date(start); d.setDate(start.getDate()+i);
+        const b = document.createElement('button');
+        b.type='button'; b.className='day';
+        b.textContent = d.toLocaleDateString(undefined,{weekday:'short'}).slice(0,2)+'\n'+d.getDate();
+        b.addEventListener('click', () => { pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); });
+        daysEl.appendChild(b);
+      }
+    }
+    function drawSlots(){
+      slotsEl.innerHTML='';
+      if (!pickedDay) return;
+      hoursFor(pickedDay).forEach(h => {
+        const b = document.createElement('button');
+        b.type='button'; b.className='slot'; b.textContent = label(h);
+        b.addEventListener('click', () => { pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); });
+        slotsEl.appendChild(b);
+      });
+    }
+    book.addEventListener('click', () => {
+      cal.classList.add('open');
+      if (!daysEl.childElementCount) drawDays();
+      cal.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
     model.addEventListener('change', sync);
     otherModel.addEventListener('input', sync);
   </script>
