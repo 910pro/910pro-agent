@@ -27,7 +27,8 @@
     .item h2 { font-size:16px; } .item p { color:var(--muted); font-size:13px; margin-top:4px; }
     .row { display:flex; gap:8px; margin-top:12px; }
     .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; }
-    select { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
+    select, input[type=text] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
+    #otherWrap { display:none; }
     #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
     footer { text-align:center; margin-top:28px; color:var(--muted); font-size:12px; }
     footer a { color:var(--neon); }
@@ -55,9 +56,10 @@
     <section class="list">
       <article class="item" id="screen">
         <h2>Screen Repair</h2>
-        <p>Pick your model LCD price shown then pay Book here for a free screen protector</p>
-        <select id="model" aria-label="iPhone model">
-          <option value="">Select iPhone model</option>
+        <p>Which phone do you have?</p>
+        <p>Book here for a FREE screen protector!</p>
+        <select id="model" aria-label="Phone model">
+          <option value="">Select model</option>
           <option value="55">iPhone 7 / 8 / SE</option>
           <option value="65">iPhone X / XR / XS / 11</option>
           <option value="70">iPhone XS Max / 11 Pro / 11 Pro Max</option>
@@ -74,11 +76,15 @@
           <option value="130">iPhone 16 Pro / 16 Pro Max</option>
           <option value="140">iPhone 17 Pro / 17 Pro Max</option>
           <option value="200">iPhone Air</option>
+          <option value="other">Type my model</option>
         </select>
+        <div id="otherWrap">
+          <input id="otherModel" type="text" placeholder="Type your model" autocomplete="off" />
+        </div>
         <p id="screenPrice"></p>
         <div class="row">
           <a class="btn" id="screenPay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Pay</a>
-          <a class="btn" href="sms:9108491009">Book</a>
+          <a class="btn" id="screenBook" href="sms:9108491009">Book</a>
         </div>
       </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
@@ -105,16 +111,58 @@
     const PAYANY = 'https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00';
     const prices = { '55':55,'65':65,'70':70,'70b':70,'80':80,'80b':80,'80c':80,'80d':80,'90':90,'90b':90,'100':100,'100b':100,'110':110,'130':130,'140':140,'200':200 };
     const model = document.getElementById('model');
+    const otherWrap = document.getElementById('otherWrap');
+    const otherModel = document.getElementById('otherModel');
     const out = document.getElementById('screenPrice');
     const pay = document.getElementById('screenPay');
+    const book = document.getElementById('screenBook');
+    function setPay(p, note) {
+      if (p) {
+        out.textContent = '$' + p;
+        pay.textContent = 'Pay $' + p;
+        pay.href = p === 80 ? PAY80 : PAYANY;
+      } else {
+        out.textContent = note || '';
+        pay.textContent = 'Pay';
+        pay.href = PAYANY;
+      }
+    }
+    function guess(text) {
+      const t = (text || '').toLowerCase();
+      if (!t.trim()) return null;
+      if (t.includes('air')) return 200;
+      if (t.includes('17 pro')) return 140;
+      if (t.includes('17')) return 110;
+      if (t.includes('16e') || t.includes('16 e')) return 90;
+      if (t.includes('16 pro')) return 130;
+      if (t.includes('16')) return 100;
+      if (t.includes('15 pro')) return 100;
+      if (t.includes('15')) return 80;
+      if (t.includes('14 pro')) return 90;
+      if (t.includes('14')) return 80;
+      if (t.includes('13 pro') || t.includes('12 pro')) return 80;
+      if (t.includes('13') || t.includes('12')) return 70;
+      if (t.includes('11 pro') || t.includes('xs max')) return 70;
+      if (t.includes('11') || t.includes('xr') || t.includes('xs') || t.includes('iphone x')) return 65;
+      if (t.includes('se') || /\b[78]\b/.test(t)) return 55;
+      return null;
+    }
     function sync() {
-      const p = prices[model.value];
-      if (!p) { out.textContent = ''; pay.textContent = 'Pay'; pay.href = PAYANY; return; }
-      out.textContent = '$' + p;
-      pay.textContent = 'Pay $' + p;
-      pay.href = p === 80 ? PAY80 : PAYANY;
+      const isOther = model.value === 'other';
+      otherWrap.style.display = isOther ? 'block' : 'none';
+      if (isOther) {
+        const typed = otherModel.value.trim();
+        const p = guess(typed);
+        setPay(p, typed ? 'Text this model to book' : '');
+        book.href = typed ? 'sms:9108491009?body=' + encodeURIComponent(typed + ' screen') : 'sms:9108491009';
+        return;
+      }
+      otherModel.value = '';
+      book.href = 'sms:9108491009';
+      setPay(prices[model.value] || null, '');
     }
     model.addEventListener('change', sync);
+    otherModel.addEventListener('input', sync);
   </script>
 </body>
 </html>
