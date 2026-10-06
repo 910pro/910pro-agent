@@ -21,15 +21,15 @@
     .n { color:#d7f7ff; } .p { color:var(--pro); text-shadow:0 0 10px rgba(42,214,255,.75); }
     .sub { max-width:280px; margin:0 auto; color:#d6f3ff; font-size:13px; line-height:1.45; font-weight:800; font-style:italic; }
     .hero-note { margin-top:12px; font-size:13px; } .hero-note a { color:var(--neon); }
-    .pay { display:flex; align-items:center; justify-content:center; width:100%; margin:8px 0; background:linear-gradient(180deg,#2ad6ff,#1296c8); border:1px solid #7af6ff; color:#041018; padding:12px; font-weight:800; box-shadow:0 0 16px rgba(61,240,255,.25); font-family:inherit; cursor:pointer; }
+    .pay { display:flex; align-items:center; justify-content:center; width:100%; margin:14px 0 8px; background:linear-gradient(180deg,#2ad6ff,#1296c8); border:1px solid #7af6ff; color:#041018; padding:12px; font-weight:800; box-shadow:0 0 16px rgba(61,240,255,.25); font-family:inherit; cursor:pointer; }
     .list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
     .item { background:var(--card); border:1px solid rgba(61,240,255,.22); padding:14px; text-align:center; }
     .item h2 { font-size:16px; } .item p { color:var(--muted); font-size:13px; margin-top:4px; }
     .row { display:flex; gap:8px; margin-top:12px; }
     .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; font-family:inherit; cursor:pointer; }
     select, input[type=text], input[type=number] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
-    #otherWrap, #depositBox { display:none; }
-    #depositBox.open { display:block; }
+    #otherWrap, #payBox { display:none; }
+    #payBox.open { display:block; margin-bottom:8px; }
     #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
     #cal { display:none; margin-top:12px; text-align:center; }
     #cal.open { display:block; }
@@ -65,12 +65,11 @@
       <p class="sub">Professional Mobile Device Repair 👨‍💻<br>Buy Sell Trade Electronics ♻️<br>Best Price Guarantee 🫡</p>
       <p class="hero-note"><a href="sms:9108491009">(910) 849-1009</a></p>
     </header>
-    <a class="pay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Make a Payment</a>
-    <button class="pay" type="button" id="depositOpen">Deposit</button>
-    <div class="item" id="depositBox">
-      <p>Type the deposit amount</p>
-      <input id="depositAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
-      <div class="row"><a class="btn" id="depositPay" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08">Pay deposit</a></div>
+    <button class="pay" type="button" id="payOpen">Make a Payment</button>
+    <div class="item" id="payBox">
+      <p>Type the amount</p>
+      <input id="payAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
+      <div class="row"><a class="btn" id="payGo" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08">Pay</a></div>
     </div>
     <section class="list">
       <article class="item" id="screen">
@@ -152,10 +151,10 @@
     const calNote = document.getElementById('calNote');
     const tipPay = document.getElementById('tipPay');
     const tipCustom = document.getElementById('tipCustom');
-    const depositOpen = document.getElementById('depositOpen');
-    const depositBox = document.getElementById('depositBox');
-    const depositAmt = document.getElementById('depositAmt');
-    const depositPay = document.getElementById('depositPay');
+    const payOpen = document.getElementById('payOpen');
+    const payBox = document.getElementById('payBox');
+    const payAmt = document.getElementById('payAmt');
+    const payGo = document.getElementById('payGo');
     let pickedDay = null, pickedSlot = null, tipAmt = 5;
     const names = ['Su','Mo','Tu','We','Th','Fr','Sa'];
     function label(h){ const end=h+1; const a=h>12?h-12:h; const b=end>12?end-12:end; return a+(h>=12?'pm':'am')+'\u2013'+b+(end>=12?'pm':'am'); }
@@ -167,9 +166,10 @@
     function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
     function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep+' deposit locks this hour and the free protector.'; pay.textContent='Pay $'+dep+' deposit'; pay.href=DONATE+'?__prefilled_amount='+(dep*100); } else { calNote.textContent='50% deposit locks your hour and the free protector.'; } }
     function setTip(n){ tipAmt=Math.max(1, Math.round(Number(n)||0)); tipPay.textContent='Donate $'+tipAmt; tipPay.href=DONATE+'?__prefilled_amount='+(tipAmt*100); }
-    function setDeposit(){ const n=Math.round(Number(depositAmt.value)||0); if(n<1){ depositPay.textContent='Pay deposit'; depositPay.href=DONATE; return; } depositPay.textContent='Pay $'+n+' deposit'; depositPay.href=DONATE+'?__prefilled_amount='+(n*100); }
-    depositOpen.addEventListener('click', () => { depositBox.classList.add('open'); depositAmt.focus(); });
-    depositAmt.addEventListener('input', setDeposit);
+    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); if(n<1){ payGo.textContent='Pay'; payGo.removeAttribute('href'); return; } payGo.textContent='Pay $'+n; payGo.href=DONATE+'?__prefilled_amount='+(n*100); }
+    payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
+    payAmt.addEventListener('input', setPayAmt);
+    payGo.addEventListener('click', e => { if(!payAmt.value || Number(payAmt.value)<1){ e.preventDefault(); payAmt.focus(); } });
     document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); tipCustom.value=''; setTip(b.dataset.amt); });
     tipCustom.addEventListener('input', () => { [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); if(tipCustom.value) setTip(tipCustom.value); });
     function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
