@@ -17,7 +17,7 @@
     .brands span { display:flex; align-items:center; justify-content:center; height:26px; color:rgba(190,234,255,.86); }
     .brands .icon { width:22px; height:22px; overflow:visible; }
     .logo { margin:0 auto 12px; display:inline-block; border:1px solid var(--neon); background:#061018; padding:10px 16px 8px; box-shadow:0 0 24px rgba(61,240,255,.18); }
-    .logo-word { font-family:Orbitron,sans-serif; font-weight:800; font-size:34px; line-height:1; }
+    .logo-word { font-family:Orbitron,sans-serif; font-weight:800; font-size:34px; line-height:1; letter-spacing:0; }
     .n { color:#d7f7ff; } .p { color:var(--pro); text-shadow:0 0 10px rgba(42,214,255,.75); }
     .sub { max-width:280px; margin:0 auto; color:#d6f3ff; font-size:13px; line-height:1.45; font-weight:800; font-style:italic; }
     .hero-note { margin-top:12px; font-size:13px; } .hero-note a { color:var(--neon); }
@@ -30,6 +30,7 @@
     select, input[type=text], input[type=number] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
     #otherWrap, #payBox { display:none; }
     #payBox.open { display:block; margin-bottom:8px; }
+    #payNote { display:none; color:#ffb4b4; font-size:12px; margin-top:8px; }
     #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
     #cal { display:none; margin-top:12px; text-align:center; }
     #cal.open { display:block; }
@@ -69,7 +70,8 @@
     <div class="item" id="payBox">
       <p>Type the amount</p>
       <input id="payAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
-      <div class="row"><a class="btn" id="payGo" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08">Pay</a></div>
+      <p id="payNote"></p>
+      <div class="row"><a class="btn" id="payGo">Pay</a></div>
     </div>
     <section class="list">
       <article class="item" id="screen">
@@ -99,7 +101,7 @@
         <div id="otherWrap"><input id="otherModel" type="text" placeholder="Type your model" autocomplete="off" /></div>
         <p id="screenPrice"></p>
         <div class="row">
-          <a class="btn" id="screenPay" href="https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00">Pay</a>
+          <a class="btn" id="screenPay" href="https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06">Pay</a>
           <button class="btn" type="button" id="screenBook">Book</button>
         </div>
         <div id="cal">
@@ -121,13 +123,12 @@
         <h2>Donations / Tips</h2>
         <p>Pick an amount</p>
         <div class="tips" id="tipAmounts">
-          <button class="tip on" type="button" data-amt="5">$5</button>
           <button class="tip" type="button" data-amt="10">$10</button>
-          <button class="tip" type="button" data-amt="20">$20</button>
-          <button class="tip" type="button" data-amt="50">$50</button>
+          <button class="tip on" type="button" data-amt="20">$20</button>
+          <button class="tip" type="button" data-amt="30">$30</button>
+          <button class="tip" type="button" data-amt="80">$80</button>
         </div>
-        <input id="tipCustom" type="number" min="1" step="1" placeholder="Other amount" />
-        <div class="row"><a class="btn" id="tipPay" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08?__prefilled_amount=500">Donate $5</a></div>
+        <div class="row"><a class="btn" id="tipPay" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">Donate $20</a></div>
       </article>
     </section>
     <footer>
@@ -136,8 +137,7 @@
   </div>
   <script>
     const PAY80 = 'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06';
-    const PAYANY = 'https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00';
-    const DONATE = 'https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08';
+    const FIXED = { 10:'https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02', 20:'https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03', 30:'https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05', 80:'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06' };
     const prices = { '55':55,'65':65,'70':70,'70b':70,'80':80,'80b':80,'80c':80,'80d':80,'90':90,'90b':90,'100':100,'100b':100,'110':110,'130':130,'140':140,'200':200 };
     const model = document.getElementById('model');
     const otherWrap = document.getElementById('otherWrap');
@@ -150,28 +150,26 @@
     const slotsEl = document.getElementById('slots');
     const calNote = document.getElementById('calNote');
     const tipPay = document.getElementById('tipPay');
-    const tipCustom = document.getElementById('tipCustom');
     const payOpen = document.getElementById('payOpen');
     const payBox = document.getElementById('payBox');
     const payAmt = document.getElementById('payAmt');
     const payGo = document.getElementById('payGo');
-    let pickedDay = null, pickedSlot = null, tipAmt = 5;
+    const payNote = document.getElementById('payNote');
+    let pickedDay = null, pickedSlot = null;
     const names = ['Su','Mo','Tu','We','Th','Fr','Sa'];
     function label(h){ const end=h+1; const a=h>12?h-12:h; const b=end>12?end-12:end; return a+(h>=12?'pm':'am')+'\u2013'+b+(end>=12?'pm':'am'); }
     function hoursFor(d){ const day=d.getDay(); if(day===0||day===6) return [10,11,12,13,14,15,16,17,18]; if(day===1||day===2) return [16,17,18,19]; return [17,18,19]; }
     function jobPrice(){ return model.value==='other' ? guess(otherModel.value) : (prices[model.value]||null); }
     function deposit(){ const p=jobPrice(); return p?Math.round(p/2):null; }
-    function setPay(p, note){ if(p){ out.textContent='$'+p; pay.textContent='Pay $'+p; pay.href=p===80?PAY80:PAYANY; } else { out.textContent=note||''; pay.textContent='Pay'; pay.href=PAYANY; } }
+    function setPay(p, note){ if(p){ out.textContent='$'+p; pay.textContent='Pay $'+p; pay.href = FIXED[p] || PAY80; } else { out.textContent=note||''; pay.textContent='Pay'; pay.href=PAY80; } }
     function guess(text){ const t=(text||'').toLowerCase(); if(!t.trim()) return null; if(t.includes('air')) return 200; if(t.includes('17 pro')) return 140; if(t.includes('17')) return 110; if(t.includes('16e')||t.includes('16 e')) return 90; if(t.includes('16 pro')) return 130; if(t.includes('16')) return 100; if(t.includes('15 pro')) return 100; if(t.includes('15')) return 80; if(t.includes('14 pro')) return 90; if(t.includes('14')) return 80; if(t.includes('13 pro')||t.includes('12 pro')) return 80; if(t.includes('13')||t.includes('12')) return 70; if(t.includes('11 pro')||t.includes('xs max')) return 70; if(t.includes('11')||t.includes('xr')||t.includes('xs')||t.includes('iphone x')) return 65; if(t.includes('se')||/\b[78]\b/.test(t)) return 55; return null; }
     function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
-    function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep+' deposit locks this hour and the free protector.'; pay.textContent='Pay $'+dep+' deposit'; pay.href=DONATE+'?__prefilled_amount='+(dep*100); } else { calNote.textContent='50% deposit locks your hour and the free protector.'; } }
-    function setTip(n){ tipAmt=Math.max(1, Math.round(Number(n)||0)); tipPay.textContent='Donate $'+tipAmt; tipPay.href=DONATE+'?__prefilled_amount='+(tipAmt*100); }
-    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); if(n<1){ payGo.textContent='Pay'; payGo.removeAttribute('href'); return; } payGo.textContent='Pay $'+n; payGo.href=DONATE+'?__prefilled_amount='+(n*100); }
+    function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep+' deposit locks this hour and the free protector.'; pay.textContent='Pay $'+dep+' deposit'; pay.href=FIXED[dep]||PAY80; } else { calNote.textContent='50% deposit locks your hour and the free protector.'; } }
+    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); const url=FIXED[n]; if(!url){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Live Stripe amounts are $10, $20, $30, and $80. Other amounts still open the $1 tip, so this stays here.':''; return; } payNote.style.display='none'; payGo.textContent='Pay $'+n; payGo.href=url; }
     payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
     payAmt.addEventListener('input', setPayAmt);
-    payGo.addEventListener('click', e => { if(!payAmt.value || Number(payAmt.value)<1){ e.preventDefault(); payAmt.focus(); } });
-    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); tipCustom.value=''; setTip(b.dataset.amt); });
-    tipCustom.addEventListener('input', () => { [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); if(tipCustom.value) setTip(tipCustom.value); });
+    payGo.addEventListener('click', e => { if(!payGo.getAttribute('href')){ e.preventDefault(); payAmt.focus(); } });
+    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate $'+n; tipPay.href=FIXED[n]; });
     function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
     function drawSlots(){ slotsEl.innerHTML=''; if(!pickedDay) return; hoursFor(pickedDay).forEach(h=>{ const b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=label(h); b.addEventListener('click',()=>{ pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); }); slotsEl.appendChild(b); }); }
     book.addEventListener('click',()=>{ cal.classList.add('open'); if(!daysEl.childElementCount) drawDays(); cal.scrollIntoView({behavior:'smooth',block:'nearest'}); });
