@@ -111,6 +111,11 @@
           <p id="calNote">50% deposit locks your hour and the free protector.</p>
         </div>
       </article>
+      <article class="item">
+        <h2>iPad Screen</h2>
+        <p>Screen replacement deposit</p>
+        <div class="row"><a class="btn" href="https://buy.stripe.com/9B6bJ2gk3fwCaXcd7k3cc0a">Pay $190</a></div>
+      </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>Data Recovery</h2><p>Free data recovery when you donate the device</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>IMEI / Blacklist Check</h2><p>Check a device before you buy or sell</p><div class="row"><a class="btn" href="https://buy.stripe.com/14A6oI4Bl706fds8R43cc01">Order</a></div></article>
@@ -137,7 +142,8 @@
   </div>
   <script>
     const PAY80 = 'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06';
-    const FIXED = { 10:'https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02', 20:'https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03', 30:'https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05', 80:'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06' };
+    const IPAD = 'https://buy.stripe.com/9B6bJ2gk3fwCaXcd7k3cc0a';
+    const FIXED = { 10:'https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02', 20:'https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03', 30:'https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05', 80:'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06', 190:IPAD };
     const prices = { '55':55,'65':65,'70':70,'70b':70,'80':80,'80b':80,'80c':80,'80d':80,'90':90,'90b':90,'100':100,'100b':100,'110':110,'130':130,'140':140,'200':200 };
     const model = document.getElementById('model');
     const otherWrap = document.getElementById('otherWrap');
@@ -165,7 +171,7 @@
     function guess(text){ const t=(text||'').toLowerCase(); if(!t.trim()) return null; if(t.includes('air')) return 200; if(t.includes('17 pro')) return 140; if(t.includes('17')) return 110; if(t.includes('16e')||t.includes('16 e')) return 90; if(t.includes('16 pro')) return 130; if(t.includes('16')) return 100; if(t.includes('15 pro')) return 100; if(t.includes('15')) return 80; if(t.includes('14 pro')) return 90; if(t.includes('14')) return 80; if(t.includes('13 pro')||t.includes('12 pro')) return 80; if(t.includes('13')||t.includes('12')) return 70; if(t.includes('11 pro')||t.includes('xs max')) return 70; if(t.includes('11')||t.includes('xr')||t.includes('xs')||t.includes('iphone x')) return 65; if(t.includes('se')||/\b[78]\b/.test(t)) return 55; return null; }
     function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
     function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep+' deposit locks this hour and the free protector.'; pay.textContent='Pay $'+dep+' deposit'; pay.href=FIXED[dep]||PAY80; } else { calNote.textContent='50% deposit locks your hour and the free protector.'; } }
-    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); const url=FIXED[n]; if(!url){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Live Stripe amounts are $10, $20, $30, and $80. Other amounts still open the $1 tip, so this stays here.':''; return; } payNote.style.display='none'; payGo.textContent='Pay $'+n; payGo.href=url; }
+    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); const url=FIXED[n]; if(!url){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Live amounts are $10, $20, $30, $80, and $190.':''; return; } payNote.style.display='none'; payGo.textContent='Pay $'+n; payGo.href=url; }
     payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
     payAmt.addEventListener('input', setPayAmt);
     payGo.addEventListener('click', e => { if(!payGo.getAttribute('href')){ e.preventDefault(); payAmt.focus(); } });
