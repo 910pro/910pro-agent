@@ -1,6 +1,6 @@
 # 910pro live pay links
 
-## Any amount (balances, tips, accessories, iPad $150, iPad $30 pickup, split payments)
+## Any amount (balances, accessories, split payments)
 https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f
 Customer types the amount ($1 to $500), leaves a phone number, and says what it's for.
 
@@ -12,10 +12,16 @@ Customer types the amount ($1 to $500), leaves a phone number, and says what it'
 
 Both deposit links ask for phone number and phone model.
 
+## Donations (site Donations / Tips buttons)
+$1, $10, $100, $1,000: the four Donate links below.
+
 ## Single-service links (text these)
 | Service | Price | Link |
 |---|---|---|
 | Donate | $1 | https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08 |
+| Donate to 910pro | $10 | https://donate.stripe.com/3cI6oI9VFbgm6GW4AO3cc0h |
+| Donate to 910pro | $100 | https://donate.stripe.com/eVq5kE1p93NUghw7N03cc0i |
+| Donate to 910pro | $1,000 | https://donate.stripe.com/eVq00kebVfwC0iyaZc3cc0j |
 | IMEI Check | $5 | https://buy.stripe.com/14A6oI4Bl706fds8R43cc01 |
 | Basic Clean | $10 | https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02 |
 | Pro Clean | $20 | https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03 |
