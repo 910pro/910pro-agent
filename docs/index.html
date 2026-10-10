@@ -78,7 +78,7 @@
     </div>
     <section class="list">
       <article class="item" id="screen">
-        <h2>Repair</h2>
+        <h2>iPhone Screen Repair</h2>
         <p>Which phone do you have?</p>
         <p>Book here for a FREE screen protector!</p>
         <select id="model" aria-label="Phone model">
@@ -133,12 +133,12 @@
         <h2>Donations / Tips</h2>
         <p>Pick an amount</p>
         <div class="tips" id="tipAmounts">
-          <button class="tip" type="button" data-amt="10">$10</button>
-          <button class="tip on" type="button" data-amt="20">$20</button>
-          <button class="tip" type="button" data-amt="30">$30</button>
-          <button class="tip" type="button" data-amt="80">$80</button>
+          <button class="tip" type="button" data-amt="1">$1</button>
+          <button class="tip on" type="button" data-amt="10">$10</button>
+          <button class="tip" type="button" data-amt="100">$100</button>
+          <button class="tip" type="button" data-amt="1000">$1,000</button>
         </div>
-        <div class="row"><a class="btn" id="tipPay" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">Donate $20</a></div>
+        <div class="row"><a class="btn" id="tipPay" href="https://donate.stripe.com/3cI6oI9VFbgm6GW4AO3cc0h">Donate $10</a></div>
       </article>
     </section>
     <footer>
@@ -163,6 +163,7 @@
     const slotsEl = document.getElementById('slots');
     const calNote = document.getElementById('calNote');
     const tipPay = document.getElementById('tipPay');
+    const DONATE = { 1:'https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08', 10:'https://donate.stripe.com/3cI6oI9VFbgm6GW4AO3cc0h', 100:'https://donate.stripe.com/eVq5kE1p93NUghw7N03cc0i', 1000:'https://donate.stripe.com/eVq00kebVfwC0iyaZc3cc0j' };
     const payOpen = document.getElementById('payOpen');
     const payBox = document.getElementById('payBox');
     const payAmt = document.getElementById('payAmt');
@@ -183,7 +184,7 @@
     payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
     payAmt.addEventListener('input', setPayAmt);
     payGo.addEventListener('click', e => { if(!payGo.getAttribute('href')){ e.preventDefault(); payAmt.focus(); } });
-    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate $'+n; tipPay.href=PAY_ANY; });
+    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate '+b.textContent; tipPay.href=DONATE[n]; });
     function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
     function drawSlots(){ slotsEl.innerHTML=''; if(!pickedDay) return; hoursFor(pickedDay).forEach(h=>{ const b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=label(h); b.addEventListener('click',()=>{ pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); }); slotsEl.appendChild(b); }); }
     book.addEventListener('click',()=>{ cal.classList.add('open'); if(!daysEl.childElementCount) drawDays(); cal.scrollIntoView({behavior:'smooth',block:'nearest'}); });
