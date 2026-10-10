@@ -8,7 +8,7 @@ What model is your device?
 ## After model if they already said screen
 Use the LCD price below. Then send the page. Stop.
 
-iPhone 15 LCD $80. Book here for a free protector:
+iPhone 15 LCD from $80, final price confirmed by text. Book here for a free protector:
 https://910pro.github.io/910pro-agent/#screen
 
 ## After model if no issue yet
@@ -34,4 +34,6 @@ Air $200
 
 If they did not say screen do not dump this list.
 If model is missing ask model only.
-Pay button on the site. $80 models can use the $80 Stripe link until Greg adds the rest.
+Prices are starting prices. Final price is confirmed by text.
+Deposit locks the slot and comes off the total: $25 under $100 (https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04), $50 for $100 and up (https://buy.stripe.com/bJe3cwaZJaci3uK2sG3cc0g).
+Balance at pickup: https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f
