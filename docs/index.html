@@ -28,7 +28,8 @@
     .row { display:flex; gap:8px; margin-top:12px; }
     .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; font-family:inherit; cursor:pointer; }
     select, input[type=text], input[type=number] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
-    #otherWrap, #payBox { display:none; }
+    #otherWrap, #payBox, #ipadRow { display:none; }
+    #ipadName { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:15px; min-height:20px; }
     #payBox.open { display:block; margin-bottom:8px; }
     #payNote { display:none; color:#ffb4b4; font-size:12px; margin-top:8px; }
     #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
@@ -111,11 +112,12 @@
           <p id="calNote">$25 deposit ($50 on $100+ repairs) locks your hour and the free protector. It comes off your total.</p>
         </div>
       </article>
-      <article class="item">
-        <h2>iPad Screen</h2>
-        <p>Apple screen $220. Aftermarket $150.</p>
-        <p>$190 deposit locks the Apple screen. $30 at pickup.</p>
-        <div class="row"><a class="btn" href="https://buy.stripe.com/9B6bJ2gk3fwCaXcd7k3cc0a">Deposit $190</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">Aftermarket $150</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">Pay $30 at pickup</a></div>
+      <article class="item" id="ipad">
+        <h2>iPad Model Search</h2>
+        <p>Look at the back of your iPad near the bottom. You will see the letter "A" followed by four numbers like this: A2602. That's the model number. Type it in here!</p>
+        <input id="ipadModel" type="text" placeholder="e.g. A2602" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" />
+        <p id="ipadName"></p>
+        <div class="row" id="ipadRow"><a class="btn" id="ipadText" href="sms:9108491009">Text 910pro for your price</a></div>
       </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>Data Recovery</h2><p>Free data recovery when you donate the device</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
@@ -182,6 +184,53 @@
     function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
     function drawSlots(){ slotsEl.innerHTML=''; if(!pickedDay) return; hoursFor(pickedDay).forEach(h=>{ const b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=label(h); b.addEventListener('click',()=>{ pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); }); slotsEl.appendChild(b); }); }
     book.addEventListener('click',()=>{ cal.classList.add('open'); if(!daysEl.childElementCount) drawDays(); cal.scrollIntoView({behavior:'smooth',block:'nearest'}); });
+    const IPAD_GROUPS = {
+      "iPad mini 4":'A1538 A1550',
+      "iPad Air 2":'A1566 A1567',
+      "iPad Pro (12.9-inch)":'A1584 A1652',
+      "iPad Pro 12.9-inch (2nd generation)":'A1670 A1671 A1821',
+      "iPad Pro (9.7-inch)":'A1673 A1674 A1675',
+      "iPad Pro (10.5-inch)":'A1701 A1709 A1852',
+      "iPad (5th generation)":'A1822 A1823',
+      "iPad Pro 12.9-inch (3rd generation)":'A1876 A1895 A1983 A2014',
+      "iPad (6th generation)":'A1893 A1954',
+      "iPad Pro 11-inch":'A1934 A1979 A1980 A2013',
+      "iPad Pro 11-inch (2nd generation)":'A2068 A2228 A2230 A2231',
+      "iPad Pro 12.9-inch (4th generation)":'A2069 A2229 A2232 A2233',
+      "iPad Air (4th generation)":'A2072 A2316 A2324 A2325',
+      "iPad Air (3rd generation)":'A2123 A2152 A2153 A2154',
+      "iPad mini (5th generation)":'A2124 A2125 A2126 A2133',
+      "iPad (7th generation)":'A2197 A2198 A2200',
+      "iPad (8th generation)":'A2270 A2428 A2429 A2430',
+      "iPad Pro 11-inch (3rd generation)":'A2301 A2377 A2459 A2460',
+      "iPad Pro 12.9-inch (5th generation)":'A2378 A2379 A2461 A2462',
+      "iPad Pro 11-inch (4th generation)":'A2435 A2759 A2761 A2762',
+      "iPad Pro 12.9-inch (6th generation)":'A2436 A2437 A2764 A2766',
+      "iPad mini (6th generation)":'A2567 A2568 A2569',
+      "iPad Air (5th generation)":'A2588 A2589 A2591',
+      "iPad (9th generation)":'A2602 A2603 A2604 A2605',
+      "iPad (10th generation)":'A2696 A2757 A2777 A3162',
+      "iPad Pro 11-inch (M4)":'A2836 A2837 A3006',
+      "iPad Air 13-inch (M2)":'A2898 A2899 A2900',
+      "iPad Air 11-inch (M2)":'A2902 A2903 A2904',
+      "iPad Pro 13-inch (M4)":'A2925 A2926 A3007',
+      "iPad mini (A17 Pro)":'A2993 A2995 A2996',
+      "iPad Air 11-inch (M3)":'A3266 A3267 A3270',
+      "iPad Air 13-inch (M3)":'A3268 A3269 A3271',
+      "iPad (A16)":'A3354 A3355 A3356',
+      "iPad Pro 11-inch (M5)":'A3357 A3358 A3359',
+      "iPad Pro 13-inch (M5)":'A3360 A3361 A3362',
+      "iPad\u00a0Air 11-inch (M4)":'A3459 A3460 A3463',
+      "iPad\u00a0Air 13-inch (M4)":'A3461 A3462 A3464'
+    };
+    const IPADS = {};
+    Object.entries(IPAD_GROUPS).forEach(([name, nums]) => nums.split(' ').forEach(n => IPADS[n] = name));
+    const ipadModel = document.getElementById('ipadModel');
+    const ipadName = document.getElementById('ipadName');
+    const ipadRow = document.getElementById('ipadRow');
+    const ipadText = document.getElementById('ipadText');
+    function ipadSync(){ const raw=(ipadModel.value||'').toUpperCase().replace(/\s+/g,''); const ok=/^A\d{4}$/.test(raw); if(!ok){ ipadRow.style.display='none'; ipadText.href='sms:9108491009'; ipadName.textContent = raw ? 'Model numbers look like A2602.' : ''; return; } const name=IPADS[raw]; ipadName.textContent = name || 'We\u2019ll look this one up for you.'; const msg='Hi 910pro, my iPad model is '+raw+(name?' ('+name+')':'')+' and the issue is: '; ipadText.href='sms:9108491009?&body='+encodeURIComponent(msg); ipadRow.style.display='flex'; }
+    ipadModel.addEventListener('input', ipadSync);
     model.addEventListener('change', sync);
     otherModel.addEventListener('input', sync);
   </script>
