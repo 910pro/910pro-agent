@@ -101,28 +101,28 @@
         <div id="otherWrap"><input id="otherModel" type="text" placeholder="Type your model" autocomplete="off" /></div>
         <p id="screenPrice"></p>
         <div class="row">
-          <a class="btn" id="screenPay" href="https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06">Pay</a>
+          <a class="btn" id="screenPay" href="sms:9108491009">Text for a quote</a>
           <button class="btn" type="button" id="screenBook">Book</button>
         </div>
         <div id="cal">
           <p>Tap a day then an hour</p>
           <div class="days" id="days"></div>
           <div class="slots" id="slots"></div>
-          <p id="calNote">50% deposit locks your hour and the free protector.</p>
+          <p id="calNote">$25 deposit ($50 on $100+ repairs) locks your hour and the free protector. It comes off your total.</p>
         </div>
       </article>
       <article class="item">
         <h2>iPad Screen</h2>
         <p>Apple screen $220. Aftermarket $150.</p>
         <p>$190 deposit locks the Apple screen. $30 at pickup.</p>
-        <div class="row"><a class="btn" href="https://buy.stripe.com/9B6bJ2gk3fwCaXcd7k3cc0a">Deposit $190</a></div>
+        <div class="row"><a class="btn" href="https://buy.stripe.com/9B6bJ2gk3fwCaXcd7k3cc0a">Deposit $190</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">Aftermarket $150</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">Pay $30 at pickup</a></div>
       </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>Data Recovery</h2><p>Free data recovery when you donate the device</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>IMEI / Blacklist Check</h2><p>Check a device before you buy or sell</p><div class="row"><a class="btn" href="https://buy.stripe.com/14A6oI4Bl706fds8R43cc01">Order</a></div></article>
       <article class="item"><h2>Basic Clean</h2><p>Exterior Includes charging port and speakers</p><div class="row"><a class="btn" href="https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02">Order</a></div></article>
-      <article class="item"><h2>Pro Clean</h2><p>Remove inner debris prevent corrosion water damage treatment all internals including connectors</p><div class="row"><a class="btn" href="https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05">Order</a></div></article>
-      <article class="item"><h2>Accessories</h2><p>Glass Protectors: clear or privacy. Charging Cables iPhone and Android. Wall Adapters 3a / 20w</p><div class="row"><a class="btn" href="https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02">$10 each</a><a class="btn" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">All 3 $20</a></div></article>
+      <article class="item"><h2>Pro Clean</h2><p>Remove inner debris prevent corrosion water damage treatment all internals including connectors</p><div class="row"><a class="btn" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">Order</a></div></article>
+      <article class="item"><h2>Accessories</h2><p>Glass Protectors: clear or privacy. Charging Cables iPhone and Android. Wall Adapters 3a / 20w</p><div class="row"><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">$10 each</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">All 3 $20</a></div></article>
       <article class="item"><h2>On-Site / HelpDesk</h2><p>Internet/Software. Equipment/Hardware. Preventative Maintenance. Ops. Management.</p><div class="row"><a class="btn" href="https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05">Book</a></div></article>
       <article class="item"><h2>B2B / Shop Block</h2><p>Multiple devices arcade POS or fleet</p><div class="row"><a class="btn" href="https://buy.stripe.com/14AcN69VFacid5kd7k3cc07">Book</a></div></article>
       <article class="item" id="tips">
@@ -134,7 +134,7 @@
           <button class="tip" type="button" data-amt="30">$30</button>
           <button class="tip" type="button" data-amt="80">$80</button>
         </div>
-        <div class="row"><a class="btn" id="tipPay" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">Donate $20</a></div>
+        <div class="row"><a class="btn" id="tipPay" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">Donate $20</a></div>
       </article>
     </section>
     <footer>
@@ -142,8 +142,11 @@
     </footer>
   </div>
   <script>
-    const PAY80 = 'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06';
-    const FIXED = { 10:'https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02', 20:'https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03', 30:'https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05', 70:'https://buy.stripe.com/dRmfZi4Blckq7L0ebo3cc0b', 80:'https://buy.stripe.com/4gM3cwffZgAG7L03wK3cc06', 190:'https://buy.stripe.com/9B6bJ2gk3fwCaXcd7k3cc0a' };
+    const DEPOSIT_25 = 'https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04';
+    const DEPOSIT_50 = 'https://buy.stripe.com/bJe3cwaZJaci3uK2sG3cc0g';
+    const PAY_ANY = 'https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f';
+    const QUOTE_SMS = 'sms:9108491009';
+    function depositFor(p){ return p >= 100 ? {amt:50, url:DEPOSIT_50} : {amt:25, url:DEPOSIT_25}; }
     const prices = { '55':55,'65':65,'70':70,'70b':70,'80':80,'80b':80,'80c':80,'80d':80,'90':90,'90b':90,'100':100,'100b':100,'110':110,'130':130,'140':140,'200':200 };
     const model = document.getElementById('model');
     const otherWrap = document.getElementById('otherWrap');
@@ -166,16 +169,16 @@
     function label(h){ const end=h+1; const a=h>12?h-12:h; const b=end>12?end-12:end; return a+(h>=12?'pm':'am')+'\u2013'+b+(end>=12?'pm':'am'); }
     function hoursFor(d){ const day=d.getDay(); if(day===0||day===6) return [10,11,12,13,14,15,16,17,18]; if(day===1||day===2) return [16,17,18,19]; return [17,18,19]; }
     function jobPrice(){ return model.value==='other' ? guess(otherModel.value) : (prices[model.value]||null); }
-    function deposit(){ const p=jobPrice(); return p?Math.round(p/2):null; }
-    function setPay(p, note){ if(p){ out.textContent='$'+p; pay.textContent='Pay $'+p; pay.href = FIXED[p] || PAY80; } else { out.textContent=note||''; pay.textContent='Pay'; pay.href=PAY80; } }
+    function deposit(){ const p=jobPrice(); return p?depositFor(p):null; }
+    function setPay(p, note){ if(p){ const d=depositFor(p); out.textContent='From $'+p+' \u00b7 final price confirmed by text'; pay.textContent='Pay $'+d.amt+' deposit'; pay.href=d.url; } else { out.textContent=note||''; pay.textContent='Text for a quote'; pay.href=QUOTE_SMS; } }
     function guess(text){ const t=(text||'').toLowerCase(); if(!t.trim()) return null; if(t.includes('air')) return 200; if(t.includes('17 pro')) return 140; if(t.includes('17')) return 110; if(t.includes('16e')||t.includes('16 e')) return 90; if(t.includes('16 pro')) return 130; if(t.includes('16')) return 100; if(t.includes('15 pro')) return 100; if(t.includes('15')) return 80; if(t.includes('14 pro')) return 90; if(t.includes('14')) return 80; if(t.includes('13 pro')||t.includes('12 pro')) return 80; if(t.includes('13')||t.includes('12')) return 70; if(t.includes('11 pro')||t.includes('xs max')) return 70; if(t.includes('11')||t.includes('xr')||t.includes('xs')||t.includes('iphone x')) return 65; if(t.includes('se')||/\b[78]\b/.test(t)) return 55; return null; }
     function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
-    function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep+' deposit locks this hour and the free protector.'; pay.textContent='Pay $'+dep+' deposit'; pay.href=FIXED[dep]||PAY80; } else { calNote.textContent='50% deposit locks your hour and the free protector.'; } }
-    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); const url=FIXED[n]; if(!url){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Live amounts are $10, $20, $30, $70, $80, and $190.':''; return; } payNote.style.display='none'; payGo.textContent='Pay $'+n; payGo.href=url; }
+    function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep.amt+' deposit locks this hour and the free protector. It comes off your total.'; pay.textContent='Pay $'+dep.amt+' deposit'; pay.href=dep.url; } else { calNote.textContent='$25 deposit ($50 on $100+ repairs) locks your hour and the free protector. It comes off your total.'; } }
+    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); if(n<1||n>500){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Online payments are $1 to $500. Text (910) 849-1009 for larger amounts.':''; return; } payNote.style.display='block'; payNote.textContent='Enter $'+n+' on the next screen.'; payGo.textContent='Pay $'+n; payGo.href=PAY_ANY; }
     payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
     payAmt.addEventListener('input', setPayAmt);
     payGo.addEventListener('click', e => { if(!payGo.getAttribute('href')){ e.preventDefault(); payAmt.focus(); } });
-    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate $'+n; tipPay.href=FIXED[n]; });
+    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate $'+n; tipPay.href=PAY_ANY; });
     function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
     function drawSlots(){ slotsEl.innerHTML=''; if(!pickedDay) return; hoursFor(pickedDay).forEach(h=>{ const b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=label(h); b.addEventListener('click',()=>{ pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); }); slotsEl.appendChild(b); }); }
     book.addEventListener('click',()=>{ cal.classList.add('open'); if(!daysEl.childElementCount) drawDays(); cal.scrollIntoView({behavior:'smooth',block:'nearest'}); });

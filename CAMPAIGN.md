@@ -14,7 +14,7 @@ What they get this week:
 - 30-day HelpDesk
 
 **$1000 Ops Retain**  
-Pay $500 twice on the same link, or storefront: https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00  
+Pay $500 twice on the same link: https://buy.stripe.com/14AcN69VFacid5kd7k3cc07  
 What they get in 90 days:
 - Everything in Starter
 - Second site visit
@@ -63,7 +63,7 @@ If they stall:
 Same visit. I come to you in Cumberland. Link holds the slot.
 
 If they say too much:
-Split it. $250 now on the storefront, $250 when I pull up. https://buy.stripe.com/28EeVeffZfwC8P46IW3cc00
+Split it. $250 now here (enter $250), $250 when I pull up. https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f
 
 ## Daily rule
 

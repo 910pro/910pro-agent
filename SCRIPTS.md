@@ -10,6 +10,6 @@ No worries, what's wrong with it?
 
 After model + issue:
 Book here: https://910pro.github.io/910pro-agent/
-$25 deposit. Book a screen here and the protector is free.
+$25 deposit ($50 on $100+ repairs), comes off your total. Book a screen here and the protector is free.
 
 Do not send a price list in chat.
