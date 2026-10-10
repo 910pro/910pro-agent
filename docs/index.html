@@ -29,6 +29,8 @@
     .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; font-family:inherit; cursor:pointer; }
     select, input[type=text], input[type=number] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
     #otherWrap, #payBox, #ipadRow { display:none; }
+    .btn.ghost { background:transparent; color:var(--neon); border:1px solid var(--neon); }
+    @media (max-width:300px){ #ipadRow { flex-direction:column; } }
     #ipadName { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:15px; min-height:20px; }
     #payBox.open { display:block; margin-bottom:8px; }
     #payNote { display:none; color:#ffb4b4; font-size:12px; margin-top:8px; }
@@ -117,7 +119,7 @@
         <p>Look at the back of your iPad near the bottom. You will see the letter "A" followed by four numbers like this: A2602. That's the model number. Type it in here!</p>
         <input id="ipadModel" type="text" placeholder="e.g. A2602" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" />
         <p id="ipadName"></p>
-        <div class="row" id="ipadRow"><a class="btn" id="ipadText" href="sms:9108491009">Text 910pro for your price</a></div>
+        <div class="row" id="ipadRow"><button class="btn" type="button" id="ipadBook">Book</button><a class="btn ghost" id="ipadQuote" href="sms:9108491009">Quote</a></div>
       </article>
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item"><h2>Data Recovery</h2><p>Free data recovery when you donate the device</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
@@ -171,10 +173,11 @@
     function label(h){ const end=h+1; const a=h>12?h-12:h; const b=end>12?end-12:end; return a+(h>=12?'pm':'am')+'\u2013'+b+(end>=12?'pm':'am'); }
     function hoursFor(d){ const day=d.getDay(); if(day===0||day===6) return [10,11,12,13,14,15,16,17,18]; if(day===1||day===2) return [16,17,18,19]; return [17,18,19]; }
     function jobPrice(){ return model.value==='other' ? guess(otherModel.value) : (prices[model.value]||null); }
-    function deposit(){ const p=jobPrice(); return p?depositFor(p):null; }
+    let ipadJob = null;
+    function deposit(){ if(ipadJob) return {amt:50, url:DEPOSIT_50}; const p=jobPrice(); return p?depositFor(p):null; }
     function setPay(p, note){ if(p){ const d=depositFor(p); out.textContent='From $'+p+' \u00b7 final price confirmed by text'; pay.textContent='Pay $'+d.amt+' deposit'; pay.href=d.url; } else { out.textContent=note||''; pay.textContent='Text for a quote'; pay.href=QUOTE_SMS; } }
     function guess(text){ const t=(text||'').toLowerCase(); if(!t.trim()) return null; if(t.includes('air')) return 200; if(t.includes('17 pro')) return 140; if(t.includes('17')) return 110; if(t.includes('16e')||t.includes('16 e')) return 90; if(t.includes('16 pro')) return 130; if(t.includes('16')) return 100; if(t.includes('15 pro')) return 100; if(t.includes('15')) return 80; if(t.includes('14 pro')) return 90; if(t.includes('14')) return 80; if(t.includes('13 pro')||t.includes('12 pro')) return 80; if(t.includes('13')||t.includes('12')) return 70; if(t.includes('11 pro')||t.includes('xs max')) return 70; if(t.includes('11')||t.includes('xr')||t.includes('xs')||t.includes('iphone x')) return 65; if(t.includes('se')||/\b[78]\b/.test(t)) return 55; return null; }
-    function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
+    function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(ipadJob){ out.textContent='iPad \u00b7 final price confirmed by text'; pay.textContent='Pay $50 deposit'; pay.href=DEPOSIT_50; } else if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
     function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep.amt+' deposit locks this hour and the free protector. It comes off your total.'; pay.textContent='Pay $'+dep.amt+' deposit'; pay.href=dep.url; } else { calNote.textContent='$25 deposit ($50 on $100+ repairs) locks your hour and the free protector. It comes off your total.'; } }
     function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); if(n<1||n>500){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Online payments are $1 to $500. Text (910) 849-1009 for larger amounts.':''; return; } payNote.style.display='block'; payNote.textContent='Enter $'+n+' on the next screen.'; payGo.textContent='Pay $'+n; payGo.href=PAY_ANY; }
     payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
@@ -228,8 +231,13 @@
     const ipadModel = document.getElementById('ipadModel');
     const ipadName = document.getElementById('ipadName');
     const ipadRow = document.getElementById('ipadRow');
-    const ipadText = document.getElementById('ipadText');
-    function ipadSync(){ const raw=(ipadModel.value||'').toUpperCase().replace(/\s+/g,''); const ok=/^A\d{4}$/.test(raw); if(!ok){ ipadRow.style.display='none'; ipadText.href='sms:9108491009'; ipadName.textContent = raw ? 'Model numbers look like A2602.' : ''; return; } const name=IPADS[raw]; ipadName.textContent = name || 'We\u2019ll look this one up for you.'; const msg='Hi 910pro, my iPad model is '+raw+(name?' ('+name+')':'')+' and the issue is: '; ipadText.href='sms:9108491009?&body='+encodeURIComponent(msg); ipadRow.style.display='flex'; }
+    const ipadQuote = document.getElementById('ipadQuote');
+    const ipadBook = document.getElementById('ipadBook');
+    let ipadPick = null;
+    function ipadSync(){ const raw=(ipadModel.value||'').toUpperCase().replace(/\s+/g,''); const ok=/^A\d{4}$/.test(raw); if(!ok){ ipadPick=null; ipadRow.style.display='none'; ipadQuote.href='sms:9108491009'; ipadName.textContent = raw ? 'Model numbers look like A2602.' : ''; return; } const name=IPADS[raw]; ipadName.textContent = name || 'We\u2019ll look this one up for you.'; ipadPick = name ? name+' ('+raw+')' : 'iPad (model '+raw+')'; const msg = !name ? 'I have an iPad (model '+raw+') and it has an issue with the ' : (/^iPad/.test(name) ? 'I have an '+name+' and it has an issue with the ' : 'I have a '+name+' iPad and it has an issue with the '); ipadQuote.href='sms:9108491009?&body='+encodeURIComponent(msg); ipadRow.style.display='flex'; }
+    ipadBook.addEventListener('click', () => { if(!ipadPick) return; ipadJob=ipadPick; model.value='other'; otherModel.value=ipadPick; sync(); book.click(); document.getElementById('screen').scrollIntoView({behavior:'smooth',block:'start'}); });
+    model.addEventListener('change', () => { ipadJob=null; });
+    otherModel.addEventListener('input', () => { ipadJob=null; });
     ipadModel.addEventListener('input', ipadSync);
     model.addEventListener('change', sync);
     otherModel.addEventListener('input', sync);
