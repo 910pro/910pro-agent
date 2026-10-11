@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>910pro — Professional Mobile Device Repair | Fayetteville</title>
+  <meta name="theme-color" content="#05070b" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --neon:#3df0ff; --pro:#2ad6ff; --text:#e8f6ff; --muted:#7f9aac; --card:rgba(8,16,24,.92); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { background: radial-gradient(1200px 500px at 50% -120px, rgba(32,180,255,.12), transparent 60%), linear-gradient(#05070b,#070b12 40%,#05070b); color:var(--text); font-family:Inter,system-ui,sans-serif; min-height:100dvh; }
+    a, button.pay { color:inherit; text-decoration:none; }
+    .wrap { max-width:480px; margin:0 auto; padding:20px 16px 48px; }
+    header { text-align:center; padding:18px 8px 10px; }
+    .brands { display:flex; align-items:center; justify-content:space-between; gap:7px; max-width:360px; margin:0 auto 14px; }
+    .brands span { display:flex; align-items:center; justify-content:center; height:26px; color:rgba(190,234,255,.86); }
+    .brands .icon { width:22px; height:22px; overflow:visible; }
+    .logo { margin:0 auto 12px; display:inline-block; border:1px solid var(--neon); background:#061018; padding:10px 16px 8px; box-shadow:0 0 24px rgba(61,240,255,.18); }
+    .logo-word { font-family:Orbitron,sans-serif; font-weight:800; font-size:34px; line-height:1; letter-spacing:0; }
+    .n { color:#d7f7ff; } .p { color:var(--pro); text-shadow:0 0 10px rgba(42,214,255,.75); }
+    .sub { max-width:280px; margin:0 auto; color:#d6f3ff; font-size:13px; line-height:1.45; font-weight:800; font-style:italic; }
+    .hero-note { margin-top:12px; font-size:13px; } .hero-note a { color:var(--neon); }
+    .pay { display:flex; align-items:center; justify-content:center; width:100%; margin:14px 0 8px; background:linear-gradient(180deg,#2ad6ff,#1296c8); border:1px solid #7af6ff; color:#041018; padding:12px; font-weight:800; box-shadow:0 0 16px rgba(61,240,255,.25); font-family:inherit; cursor:pointer; }
+    .list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+    .item { background:var(--card); border:1px solid rgba(61,240,255,.22); padding:14px; text-align:center; }
+    .item h2 { font-size:16px; } .item p { color:var(--muted); font-size:13px; margin-top:4px; }
+    .row { display:flex; gap:8px; margin-top:12px; }
+    .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; font-family:inherit; cursor:pointer; }
+    select, input[type=text], input[type=number] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
+    #otherWrap, #payBox, #ipadRow { display:none; }
+    .btn.ghost { background:transparent; color:var(--neon); border:1px solid var(--neon); }
+    @media (max-width:300px){ #ipadRow { flex-direction:column; } }
+    #ipadName { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:15px; min-height:20px; }
+    #payBox.open { display:block; margin-bottom:8px; }
+    #payNote { display:none; color:#ffb4b4; font-size:12px; margin-top:8px; }
+    #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
+    #cal { display:none; margin-top:12px; text-align:center; }
+    #cal.open { display:block; }
+    .days, .slots { display:grid; gap:6px; margin-top:8px; }
+    .days { grid-template-columns:repeat(7,1fr); }
+    .slots { grid-template-columns:1fr 1fr; }
+    .day, .slot { background:#07121a; border:1px solid rgba(61,240,255,.28); color:var(--text); cursor:pointer; font-family:inherit; }
+    .day { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:52px; padding:6px 2px; line-height:1.15; }
+    .day .dow { font-size:10px; letter-spacing:.04em; color:#9ec4d6; }
+    .day .num { font-size:13px; font-weight:800; }
+    .slot { padding:10px 6px; font-size:12px; }
+    .day.on, .slot.on { border-color:var(--neon); box-shadow:0 0 12px rgba(61,240,255,.25); }
+    #calNote { margin-top:8px; color:var(--muted); font-size:12px; }
+    .tips { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px; }
+    .tip { background:#07121a; border:1px solid rgba(61,240,255,.28); color:var(--text); padding:8px 4px; font-family:inherit; cursor:pointer; }
+    .chips { grid-template-columns:repeat(3,1fr); }
+    .chips .tip { font-size:12px; padding:9px 4px; }
+    .flabel { margin-top:12px !important; color:#d6f3ff !important; font-weight:700; font-size:12px !important; }
+    #drNote { display:none; color:#ffb4b4; font-size:12px; margin-top:8px; }
+    .tip.on { border-color:var(--neon); box-shadow:0 0 12px rgba(61,240,255,.25); }
+    footer { text-align:center; margin-top:28px; color:var(--muted); font-size:12px; }
+    footer a { color:var(--neon); }
+    #intro { position:fixed; inset:0; z-index:9999; pointer-events:none; background:#020308; animation:introDim 1.3s ease-out .15s forwards; }
+    #intro .sweep { position:absolute; left:0; right:0; top:46%; height:3px; overflow:hidden; }
+    #intro .sweep span { display:block; height:100%; width:35%; background:linear-gradient(90deg,transparent,#fff3b0,#ffd24a,#7af6ff,transparent); box-shadow:0 0 18px rgba(255,210,70,.6); animation:introCrawl .9s ease-in-out forwards; }
+    @keyframes introDim { 0%{opacity:1} 100%{opacity:0;visibility:hidden} }
+    @keyframes introCrawl { from{transform:translateX(-110%)} to{transform:translateX(300%)} }
+    @media (prefers-reduced-motion: reduce) { #intro { display:none; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brands" aria-label="Apple Android LG Motorola HP Windows">
+        <span title="Apple"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.2 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9s-1.8-.8-3.1-.8c-1.6.1-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.8 2.4 3.1 2.4 1.2-.1 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.1 3-2.3.9-1.3 1.3-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.9zm-2-7.6c.7-.8 1.1-1.9 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 .1.1 2.2-.4 2.9-1.4z"/></svg></span>
+        <span title="Android"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></svg></span>
+        <span title="LG"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M10.3 4.85A7.35 7.35 0 1 0 17.2 16.55" fill="none" stroke="#05070b" stroke-width="1.65" stroke-linecap="round"/><path d="M17.05 16.35H12.15" fill="none" stroke="#05070b" stroke-width="1.65" stroke-linecap="butt"/><path d="M11.35 7.7V16.35H15.55" fill="none" stroke="#05070b" stroke-width="1.7" stroke-linecap="butt" stroke-linejoin="miter"/><circle cx="8.95" cy="10.15" r="1.15" fill="#05070b"/></svg></span>
+        <span title="Motorola"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12C24.002 5.375 18.632.002 12.007 0H12zm7.327 18.065s-.581-2.627-1.528-4.197c-.514-.857-1.308-1.553-2.368-1.532-.745 0-1.399.423-2.2 1.553-.469.77-.882 1.573-1.235 2.403 0 0-.29-.675-.63-1.343a8.038 8.038 0 0 0-.605-1.049c-.804-1.13-1.455-1.539-2.2-1.553-1.049-.021-1.854.675-2.364 1.528-.948 1.574-1.528 4.197-1.528 4.197h-.864l4.606-15.12 3.56 11.804.024.021.024-.021 3.56-11.804 4.61 15.113h-.862z"/></svg></span>
+        <span title="HP"><svg class="icon" viewBox="-10 0 1014 1012" aria-hidden="true"><path fill="currentColor" d="m498 1012h-15l103-284h143q19 0 37-12.5t24-30.5l111-309q15-39-4.5-65.5t-59.5-26.5h-198l-164 457-94 258q-84-20-156-66-71-46-123.5-111t-81.5-146q-30-80-30-170 0-87 28-166 28-78 78-142t118-110 148-68l-96 266-163 442h107l137-376h81l-137 376h107l128-350q14-38-5-65t-59-27h-90l103-286h23q105 0 197 40t160.5 108.5 108.5 160.5 40 197-40 197-108.5 160.5-160.5 108.5-197 40zm305-662h-81l-113 310h81z"/></svg></span>
+        <span title="Windows"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 5.2 11.2 4.2v7.1H4V5.2zm8  -.8L20.4 3v8.3h-8.4V4.4zM4 12.7h7.2V20L4 18.9v-6.2zm8 .2h8.4V21l-8.4-1.2v-6.9z"/></svg></span>
+      </div>
+      <div class="logo"><span class="logo-word"><span class="n">910</span><span class="p">pro</span></span></div>
+      <p class="sub">Professional Mobile Device Repair 👨‍💻<br>Buy Sell Trade Electronics ♻️<br>Best Price Guarantee 🫡</p>
+      <p class="hero-note"><a href="sms:9108491009">(910) 849-1009</a></p>
+    </header>
+    <button class="pay" type="button" id="payOpen">Make a Payment</button>
+    <a class="pay" id="veefaF1" href="https://buy.stripe.com/6oUbJ2aZJdoughw2sG3cc0k" style="display:block;text-align:center;text-decoration:none;margin-top:10px">Veefa F1 — $380</a>
+    <div class="item" id="payBox">
+      <p>Type the amount</p>
+      <input id="payAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
+      <p id="payNote"></p>
+      <div class="row"><a class="btn" id="payGo">Pay</a></div>
+    </div>
+    <section class="list">
+      <article class="item" id="screen">
+        <h2>iPhone Screen Repair</h2>
+        <p>Which phone do you have?</p>
+        <p>Book here for a FREE screen protector!</p>
+        <select id="model" aria-label="Phone model">
+          <option value="">Select model</option>
+          <option value="55">iPhone 7 / 8 / SE</option>
+          <option value="65">iPhone X / XR / XS / 11</option>
+          <option value="70">iPhone XS Max / 11 Pro / 11 Pro Max</option>
+          <option value="70b">iPhone 12 / 13</option>
+          <option value="80">iPhone 12 Pro / 12 Pro Max</option>
+          <option value="80b">iPhone 13 Pro / 13 Pro Max</option>
+          <option value="80c">iPhone 14 / 14 Plus</option>
+          <option value="80d">iPhone 15 / 15 Plus</option>
+          <option value="90">iPhone 14 Pro / 14 Pro Max</option>
+          <option value="90b">iPhone 16E</option>
+          <option value="100">iPhone 15 Pro / 15 Pro Max</option>
+          <option value="100b">iPhone 16 / 16 Plus</option>
+          <option value="110">iPhone 17</option>
+          <option value="130">iPhone 16 Pro / 16 Pro Max</option>
+          <option value="140">iPhone 17 Pro / 17 Pro Max</option>
+          <option value="200">iPhone Air</option>
+          <option value="other">Type my model</option>
+        </select>
+        <div id="otherWrap"><input id="otherModel" type="text" placeholder="Type your model" autocomplete="off" /></div>
+        <p id="screenPrice"></p>
+        <div class="row">
+          <a class="btn" id="screenPay" href="sms:9108491009">Text for a quote</a>
+          <button class="btn" type="button" id="screenBook">Book</button>
+        </div>
+        <div id="cal">
+          <p>Tap a day then an hour</p>
+          <div class="days" id="days"></div>
+          <div class="slots" id="slots"></div>
+          <p id="calNote">$25 deposit ($50 on $100+ repairs) locks your hour and the free protector. It comes off your total.</p>
+        </div>
+      </article>
+      <article class="item" id="ipad">
+        <h2>iPad Model Search</h2>
+        <p>Look at the back of your iPad near the bottom. You will see the letter "A" followed by four numbers like this: A2602. That's the model number. Type it in here!</p>
+        <input id="ipadModel" type="text" placeholder="e.g. A2602" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" />
+        <p id="ipadName"></p>
+        <div class="row" id="ipadRow"><button class="btn" type="button" id="ipadBook">Book</button><a class="btn ghost" id="ipadQuote" href="sms:9108491009">Quote</a></div>
+      </article>
+      <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
+      <article class="item" id="recovery">
+        <h2>Data Recovery</h2>
+        <p>Free data recovery when you donate the device</p>
+        <p class="flabel">Device</p>
+        <input id="drDevice" type="text" placeholder="e.g. iPhone 13, Galaxy S22, iPad, laptop" autocomplete="off" />
+        <p class="flabel">What happened?</p>
+        <div class="tips chips" id="drWhat">
+          <button class="tip" type="button">Dropped</button>
+          <button class="tip" type="button">Water</button>
+          <button class="tip" type="button">Won't turn on</button>
+          <button class="tip" type="button">Forgot passcode</button>
+          <button class="tip" type="button">Other</button>
+        </div>
+        <p class="flabel">What do you need back?</p>
+        <div class="tips chips" id="drNeed">
+          <button class="tip" type="button">Photos</button>
+          <button class="tip" type="button">Contacts</button>
+          <button class="tip" type="button">Texts</button>
+          <button class="tip" type="button">Files</button>
+          <button class="tip" type="button">Everything</button>
+        </div>
+        <p class="flabel">Name</p>
+        <input id="drName" type="text" placeholder="Your name" autocomplete="name" />
+        <p id="drNote"></p>
+        <div class="row"><a class="btn" id="drSend" href="sms:9108491009">Send request</a></div>
+      </article>
+      <article class="item"><h2>IMEI / Blacklist Check</h2><p>Check a device before you buy or sell</p><div class="row"><a class="btn" href="https://buy.stripe.com/14A6oI4Bl706fds8R43cc01">Order</a></div></article>
+      <article class="item"><h2>Basic Clean</h2><p>Exterior Includes charging port and speakers</p><div class="row"><a class="btn" href="https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02">Order</a></div></article>
+      <article class="item"><h2>Pro Clean</h2><p>Remove inner debris prevent corrosion water damage treatment all internals including connectors</p><div class="row"><a class="btn" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">Order</a></div></article>
+      <article class="item"><h2>Accessories</h2><p>Glass Protectors: clear or privacy. Charging Cables iPhone and Android. Wall Adapters 3a / 20w</p><div class="row"><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">$10 each</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">All 3 $20</a></div></article>
+      <article class="item"><h2>On-Site / HelpDesk</h2><p>Internet/Software. Equipment/Hardware. Preventative Maintenance. Ops. Management.</p><div class="row"><a class="btn" href="https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05">Book</a></div></article>
+      <article class="item"><h2>B2B / Shop Block</h2><p>Multiple devices arcade POS or fleet</p><div class="row"><a class="btn" href="https://buy.stripe.com/14AcN69VFacid5kd7k3cc07">Book</a></div></article>
+      <article class="item" id="tips">
+        <h2>Donations / Tips</h2>
+        <p>Pick an amount</p>
+        <div class="tips" id="tipAmounts">
+          <button class="tip on" type="button" data-amt="1">$1</button>
+          <button class="tip" type="button" data-amt="10">$10</button>
+          <button class="tip" type="button" data-amt="100">$100</button>
+          <button class="tip" type="button" data-amt="1000">$1,000</button>
+        </div>
+        <div class="row"><a class="btn" id="tipPay" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08">Donate $1</a></div>
+      </article>
+    </section>
+    <footer>
+      <p>910pro · Fayetteville / Cumberland County</p>
+    </footer>
+  </div>
+  <script>
+    const DEPOSIT_25 = 'https://buy.stripe.com/dRm14o3xhckq1mCd7k3cc04';
+    const DEPOSIT_50 = 'https://buy.stripe.com/bJe3cwaZJaci3uK2sG3cc0g';
+    const PAY_ANY = 'https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f';
+    const QUOTE_SMS = 'sms:9108491009';
+    function depositFor(p){ return p >= 100 ? {amt:50, url:DEPOSIT_50} : {amt:25, url:DEPOSIT_25}; }
+    const prices = { '55':55,'65':65,'70':70,'70b':70,'80':80,'80b':80,'80c':80,'80d':80,'90':90,'90b':90,'100':100,'100b':100,'110':110,'130':130,'140':140,'200':200 };
+    const model = document.getElementById('model');
+    const otherWrap = document.getElementById('otherWrap');
+    const otherModel = document.getElementById('otherModel');
+    const out = document.getElementById('screenPrice');
+    const pay = document.getElementById('screenPay');
+    const book = document.getElementById('screenBook');
+    const cal = document.getElementById('cal');
+    const daysEl = document.getElementById('days');
+    const slotsEl = document.getElementById('slots');
+    const calNote = document.getElementById('calNote');
+    const tipPay = document.getElementById('tipPay');
+    const DONATE = { 1:'https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08', 10:'https://donate.stripe.com/3cI6oI9VFbgm6GW4AO3cc0h', 100:'https://donate.stripe.com/eVq5kE1p93NUghw7N03cc0i', 1000:'https://donate.stripe.com/eVq00kebVfwC0iyaZc3cc0j' };
+    const payOpen = document.getElementById('payOpen');
+    const payBox = document.getElementById('payBox');
+    const payAmt = document.getElementById('payAmt');
+    const payGo = document.getElementById('payGo');
+    const payNote = document.getElementById('payNote');
+    let pickedDay = null, pickedSlot = null;
+    const names = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    function label(h){ const end=h+1; const a=h>12?h-12:h; const b=end>12?end-12:end; return a+(h>=12?'pm':'am')+'\u2013'+b+(end>=12?'pm':'am'); }
+    function hoursFor(d){ const day=d.getDay(); if(day===0||day===6) return [10,11,12,13,14,15,16,17,18]; if(day===1||day===2) return [16,17,18,19]; return [17,18,19]; }
+    function jobPrice(){ return model.value==='other' ? guess(otherModel.value) : (prices[model.value]||null); }
+    let ipadJob = null;
+    function deposit(){ if(ipadJob) return {amt:50, url:DEPOSIT_50}; const p=jobPrice(); return p?depositFor(p):null; }
+    function setPay(p, note){ if(p){ const d=depositFor(p); out.textContent='From $'+p+' \u00b7 final price confirmed by text'; pay.textContent='Pay $'+d.amt+' deposit'; pay.href=d.url; } else { out.textContent=note||''; pay.textContent='Text for a quote'; pay.href=QUOTE_SMS; } }
+    function guess(text){ const t=(text||'').toLowerCase(); if(!t.trim()) return null; if(t.includes('air')) return 200; if(t.includes('17 pro')) return 140; if(t.includes('17')) return 110; if(t.includes('16e')||t.includes('16 e')) return 90; if(t.includes('16 pro')) return 130; if(t.includes('16')) return 100; if(t.includes('15 pro')) return 100; if(t.includes('15')) return 80; if(t.includes('14 pro')) return 90; if(t.includes('14')) return 80; if(t.includes('13 pro')||t.includes('12 pro')) return 80; if(t.includes('13')||t.includes('12')) return 70; if(t.includes('11 pro')||t.includes('xs max')) return 70; if(t.includes('11')||t.includes('xr')||t.includes('xs')||t.includes('iphone x')) return 65; if(t.includes('se')||/\b[78]\b/.test(t)) return 55; return null; }
+    function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(ipadJob){ out.textContent='iPad \u00b7 final price confirmed by text'; pay.textContent='Pay $50 deposit'; pay.href=DEPOSIT_50; } else if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
+    function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 $'+dep.amt+' deposit locks this hour and the free protector. It comes off your total.'; pay.textContent='Pay $'+dep.amt+' deposit'; pay.href=dep.url; } else { calNote.textContent='$25 deposit ($50 on $100+ repairs) locks your hour and the free protector. It comes off your total.'; } }
+    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); if(n<1||n>500){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Online payments are $1 to $500. Text (910) 849-1009 for larger amounts.':''; return; } payNote.style.display='block'; payNote.textContent='Enter $'+n+' on the next screen.'; payGo.textContent='Pay $'+n; payGo.href=PAY_ANY; }
+    payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
+    payAmt.addEventListener('input', setPayAmt);
+    payGo.addEventListener('click', e => { if(!payGo.getAttribute('href')){ e.preventDefault(); payAmt.focus(); } });
+    document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate '+b.textContent; tipPay.href=DONATE[n]; });
+    function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
+    function drawSlots(){ slotsEl.innerHTML=''; if(!pickedDay) return; hoursFor(pickedDay).forEach(h=>{ const b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=label(h); b.addEventListener('click',()=>{ pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); }); slotsEl.appendChild(b); }); }
+    book.addEventListener('click',()=>{ cal.classList.add('open'); if(!daysEl.childElementCount) drawDays(); cal.scrollIntoView({behavior:'smooth',block:'nearest'}); });
+    const IPAD_GROUPS = {
+      "iPad mini 4":'A1538 A1550',
+      "iPad Air 2":'A1566 A1567',
+      "iPad Pro (12.9-inch)":'A1584 A1652',
+      "iPad Pro 12.9-inch (2nd generation)":'A1670 A1671 A1821',
+      "iPad Pro (9.7-inch)":'A1673 A1674 A1675',
+      "iPad Pro (10.5-inch)":'A1701 A1709 A1852',
+      "iPad (5th generation)":'A1822 A1823',
+      "iPad Pro 12.9-inch (3rd generation)":'A1876 A1895 A1983 A2014',
+      "iPad (6th generation)":'A1893 A1954',
+      "iPad Pro 11-inch":'A1934 A1979 A1980 A2013',
+      "iPad Pro 11-inch (2nd generation)":'A2068 A2228 A2230 A2231',
+      "iPad Pro 12.9-inch (4th generation)":'A2069 A2229 A2232 A2233',
+      "iPad Air (4th generation)":'A2072 A2316 A2324 A2325',
+      "iPad Air (3rd generation)":'A2123 A2152 A2153 A2154',
+      "iPad mini (5th generation)":'A2124 A2125 A2126 A2133',
+      "iPad (7th generation)":'A2197 A2198 A2200',
+      "iPad (8th generation)":'A2270 A2428 A2429 A2430',
+      "iPad Pro 11-inch (3rd generation)":'A2301 A2377 A2459 A2460',
+      "iPad Pro 12.9-inch (5th generation)":'A2378 A2379 A2461 A2462',
+      "iPad Pro 11-inch (4th generation)":'A2435 A2759 A2761 A2762',
+      "iPad Pro 12.9-inch (6th generation)":'A2436 A2437 A2764 A2766',
+      "iPad mini (6th generation)":'A2567 A2568 A2569',
+      "iPad Air (5th generation)":'A2588 A2589 A2591',
+      "iPad (9th generation)":'A2602 A2603 A2604 A2605',
+      "iPad (10th generation)":'A2696 A2757 A2777 A3162',
+      "iPad Pro 11-inch (M4)":'A2836 A2837 A3006',
+      "iPad Air 13-inch (M2)":'A2898 A2899 A2900',
+      "iPad Air 11-inch (M2)":'A2902 A2903 A2904',
+      "iPad Pro 13-inch (M4)":'A2925 A2926 A3007',
+      "iPad mini (A17 Pro)":'A2993 A2995 A2996',
+      "iPad Air 11-inch (M3)":'A3266 A3267 A3270',
+      "iPad Air 13-inch (M3)":'A3268 A3269 A3271',
+      "iPad (A16)":'A3354 A3355 A3356',
+      "iPad Pro 11-inch (M5)":'A3357 A3358 A3359',
+      "iPad Pro 13-inch (M5)":'A3360 A3361 A3362',
+      "iPad\u00a0Air 11-inch (M4)":'A3459 A3460 A3463',
+      "iPad\u00a0Air 13-inch (M4)":'A3461 A3462 A3464'
+    };
+    const IPADS = {};
+    Object.entries(IPAD_GROUPS).forEach(([name, nums]) => nums.split(' ').forEach(n => IPADS[n] = name));
+    const ipadModel = document.getElementById('ipadModel');
+    const ipadName = document.getElementById('ipadName');
+    const ipadRow = document.getElementById('ipadRow');
+    const ipadQuote = document.getElementById('ipadQuote');
+    const ipadBook = document.getElementById('ipadBook');
+    let ipadPick = null;
+    function ipadSync(){ const raw=(ipadModel.value||'').toUpperCase().replace(/\s+/g,''); const ok=/^A\d{4}$/.test(raw); if(!ok){ ipadPick=null; ipadRow.style.display='none'; ipadQuote.href='sms:9108491009'; ipadName.textContent = raw ? 'Model numbers look like A2602.' : ''; return; } const name=IPADS[raw]; ipadName.textContent = name || 'We\u2019ll look this one up for you.'; ipadPick = name ? name+' ('+raw+')' : 'iPad (model '+raw+')'; const msg = !name ? 'I have an iPad (model '+raw+') and it has an issue with the ' : (/^iPad/.test(name) ? 'I have an '+name+' and it has an issue with the ' : 'I have a '+name+' iPad and it has an issue with the '); ipadQuote.href='sms:9108491009?&body='+encodeURIComponent(msg); ipadRow.style.display='flex'; }
+    ipadBook.addEventListener('click', () => { if(!ipadPick) return; ipadJob=ipadPick; model.value='other'; otherModel.value=ipadPick; sync(); book.click(); document.getElementById('screen').scrollIntoView({behavior:'smooth',block:'start'}); });
+    const drDevice = document.getElementById('drDevice'), drName = document.getElementById('drName'), drWhat = document.getElementById('drWhat'), drNeed = document.getElementById('drNeed'), drSend = document.getElementById('drSend'), drNote = document.getElementById('drNote');
+    function drPicked(box){ return [...box.querySelectorAll('.tip.on')].map(b=>b.textContent); }
+    function drSync(){ const dev=drDevice.value.trim(); const what=drPicked(drWhat)[0]||'not sure'; const need=drPicked(drNeed).join(', ')||'not sure'; const name=drName.value.trim(); const msg='Data recovery request: Device: '+(dev||'not sure')+'. What happened: '+what+'. Need back: '+need+'. Name: '+(name||'-')+'.'; drSend.href='sms:9108491009?&body='+encodeURIComponent(msg); if(dev) drNote.style.display='none'; }
+    drWhat.addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; const was=b.classList.contains('on'); [...drWhat.children].forEach(x=>x.classList.remove('on')); if(!was) b.classList.add('on'); drSync(); });
+    drNeed.addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; const all=[...drNeed.children]; const every=all[all.length-1]; if(b===every){ const on=!b.classList.contains('on'); all.forEach(x=>x.classList.remove('on')); if(on) b.classList.add('on'); } else { every.classList.remove('on'); b.classList.toggle('on'); } drSync(); });
+    drDevice.addEventListener('input', drSync); drName.addEventListener('input', drSync);
+    drSend.addEventListener('click', e => { if(!drDevice.value.trim()){ e.preventDefault(); drNote.textContent='Tell us the device first.'; drNote.style.display='block'; drDevice.focus(); } });
+    drSync();
+    model.addEventListener('change', () => { ipadJob=null; });
+    otherModel.addEventListener('input', () => { ipadJob=null; });
+    ipadModel.addEventListener('input', ipadSync);
+    model.addEventListener('change', sync);
+    otherModel.addEventListener('input', sync);
+  </script>
+  <div id="intro" aria-hidden="true"><div class="sweep"><span></span></div></div>
+  <script>setTimeout(function(){var i=document.getElementById('intro');if(i)i.remove();},1700);</script>
+</body>
+</html>
