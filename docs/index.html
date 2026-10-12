@@ -177,14 +177,15 @@
           <textarea id="ebIssue" name="issue" placeholder="e.g. Dies after a couple miles, back brake squeals, display shows E-10" maxlength="2000"></textarea>
           <label class="flabel" for="ebPhoto">Not sure which model? Send a picture</label>
           <label class="cam" for="ebPhoto"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg><span id="ebCamText">Take or pick a photo</span></label>
-          <input id="ebPhoto" name="photo" type="file" accept="image/*" capture="environment" />
+          <input id="ebPhoto" name="photo" type="file" accept="image/*" />
           <div id="ebThumbWrap"><img id="ebThumb" alt="Your bike photo" /><br><button type="button" id="ebClear">Remove photo</button></div>
           <label class="flabel" for="ebName">Name</label>
           <input id="ebName" name="name" type="text" placeholder="Your name" autocomplete="name" maxlength="80" />
-          <label class="flabel" for="ebPhone">Phone (optional)</label>
-          <input id="ebPhone" name="phone" type="tel" placeholder="Only if it’s different from the one you text from" autocomplete="tel" inputmode="tel" maxlength="20" />
+          <label class="flabel" for="ebPhone" id="ebPhoneLabel">Phone</label>
+          <input id="ebPhone" name="phone" type="tel" placeholder="Best number to text you" autocomplete="tel" inputmode="tel" maxlength="20" />
+          <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><label for="ebWebsite">Website</label><input id="ebWebsite" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
           <div id="ebNote"></div>
-          <div class="row"><button class="btn" type="submit" id="ebSend">Text it to me</button><a class="btn ghost" href="sms:9108491009">Just text me</a></div>
+          <div class="row"><button class="btn" type="submit" id="ebSend">Send</button><a class="btn ghost" href="sms:9108491009">Just text me</a></div>
           <p style="margin-top:8px;font-size:12px;text-align:center">Or text (910) 849-1009</p>
         </form>
       </article>
@@ -193,7 +194,7 @@
       <article class="item"><h2>Pro Clean</h2><p>Remove inner debris prevent corrosion water damage treatment all internals including connectors</p><div class="row"><a class="btn" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">Order</a></div></article>
       <article class="item"><h2>Accessories</h2><p>Glass Protectors: clear or privacy. Charging Cables iPhone and Android. Wall Adapters 3a / 20w</p><div class="row"><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">$10 each</a><a class="btn" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f">All 3 $20</a></div></article>
       <article class="item"><h2>On-Site / HelpDesk</h2><p>Internet/Software. Equipment/Hardware. Preventative Maintenance. Ops. Management.</p><div class="row"><a class="btn" href="https://buy.stripe.com/fZu3cw7Nxckqghw2sG3cc05">Book</a></div></article>
-      <article class="item"><h2>B2B / Shop Block</h2><p>Multiple devices arcade POS or fleet</p><div class="row"><a class="btn" href="https://buy.stripe.com/14AcN69VFacid5kd7k3cc07">Book</a></div></article>
+      <article class="item"><h2>B2B</h2><p>Multiple devices arcade POS or fleet</p><div class="row"><a class="btn" href="https://buy.stripe.com/14AcN69VFacid5kd7k3cc07">Book</a></div></article>
       <article class="item" id="tips">
         <h2>Donations / Tips</h2>
         <p>Pick an amount</p>
@@ -320,15 +321,41 @@
     ipadModel.addEventListener('input', ipadSync);
     model.addEventListener('change', sync);
     otherModel.addEventListener('input', sync);
-    // ---- E-bike repair form: opens a prefilled text to 910-849-1009 (no backend yet) ----
-    const EBIKE_SMS = 'sms:9108491009?&body='; // same format as the rest of the site; works on iOS and Android
-    const ebForm = document.getElementById('ebForm'), ebPhoto = document.getElementById('ebPhoto'), ebThumb = document.getElementById('ebThumb'), ebThumbWrap = document.getElementById('ebThumbWrap'), ebCamText = document.getElementById('ebCamText'), ebNote = document.getElementById('ebNote');
-    let ebUrl = null;
+    // ---- E-bike repair form ----
+    // EBIKE_ENDPOINT: URL of the 910pro-ebike-intake service, e.g. 'https://<app>.up.railway.app/api/ebike-intake'.
+    // Leave '' to skip the upload and open a prefilled text instead. Any upload failure also falls back to the text.
+    const EBIKE_ENDPOINT = '';
+    const EBIKE_SMS = 'sms:9108491009?&body=';
+    const ebForm = document.getElementById('ebForm'), ebPhoto = document.getElementById('ebPhoto'), ebThumb = document.getElementById('ebThumb'), ebThumbWrap = document.getElementById('ebThumbWrap'), ebCamText = document.getElementById('ebCamText'), ebNote = document.getElementById('ebNote'), ebSend = document.getElementById('ebSend');
+    let ebUrl = null, ebBusy = false;
+    if(!EBIKE_ENDPOINT){ document.getElementById('ebPhoneLabel').textContent='Phone (optional)'; ebForm.phone.placeholder='Only if it\u2019s different from the one you text from'; }
     function ebMsg(t, err){ ebNote.textContent=t; ebNote.className=err?'err':''; ebNote.style.display='block'; }
+    function ebHtml(h, err){ ebNote.innerHTML=h; ebNote.className=err?'err':''; ebNote.style.display='block'; }
     ebPhoto.addEventListener('change', () => { const f=ebPhoto.files[0]; if(ebUrl){ URL.revokeObjectURL(ebUrl); ebUrl=null; } if(!f){ ebThumbWrap.style.display='none'; ebCamText.textContent='Take or pick a photo'; return; } if(f.type && !/^image\//.test(f.type)){ ebMsg('That file isn\u2019t a photo.', true); ebPhoto.value=''; return; } ebUrl=URL.createObjectURL(f); ebThumb.src=ebUrl; ebThumbWrap.style.display='block'; ebCamText.textContent='Change photo'; ebNote.style.display='none'; });
     document.getElementById('ebClear').addEventListener('click', () => { ebPhoto.value=''; ebPhoto.dispatchEvent(new Event('change')); });
     function ebSmsHref(){ const bike=ebForm.bike.value.trim(), issue=ebForm.issue.value.trim(), name=ebForm.name.value.trim(), phone=ebForm.phone.value.trim(); let msg='E-bike repair: '+(bike||'not sure, sending a photo')+'. Issue: '+issue+'.'; if(name) msg+=' Name: '+name+'.'; if(phone) msg+=' Call back: '+phone+'.'; return EBIKE_SMS+encodeURIComponent(msg); }
-    ebForm.addEventListener('submit', e => { e.preventDefault(); const bike=ebForm.bike.value.trim(), issue=ebForm.issue.value.trim(), phoneRaw=ebForm.phone.value.trim(), phone=phoneRaw.replace(/\D/g,''); const hasPhoto=ebPhoto.files.length>0; if(!issue){ ebMsg('Tell me what\u2019s going on with the bike.', true); ebForm.issue.focus(); return; } if(!bike && !hasPhoto){ ebMsg('Put the bike name or snap a photo of it.', true); ebForm.bike.focus(); return; } if(phoneRaw && phone.length<10){ ebMsg('That phone number looks short. Fix it or leave it blank.', true); ebForm.phone.focus(); return; } const href=ebSmsHref(); if(hasPhoto){ ebNote.className=''; ebNote.innerHTML='Attach your photo in the text that opens. <a href="'+href+'" style="color:var(--neon);text-decoration:underline">Didn\u2019t open? Tap here</a>'; ebNote.style.display='block'; setTimeout(()=>{ window.location.href=href; }, 1200); } else { ebNote.style.display='none'; window.location.href=href; } });
+    function ebSmsFallback(lead){ const href=ebSmsHref(); const hasPhoto=ebPhoto.files.length>0; const tap=' <a href="'+href+'" style="color:var(--neon);text-decoration:underline">Didn\u2019t open? Tap here</a>'; if(hasPhoto||lead){ ebHtml((lead?lead+' ':'')+(hasPhoto?'Attach your photo in the text that opens.':'')+tap); setTimeout(()=>{ window.location.href=href; }, 1200); } else { ebNote.style.display='none'; window.location.href=href; } }
+    // Optional speed-up: shrink big photos so the longest side is ~2000px. The server still re-checks and strips everything.
+    async function ebShrink(file){ try { if(!file || file.size < 1.5*1024*1024) return file; const bmp = await createImageBitmap(file, {imageOrientation:'from-image'}); const s=Math.min(1, 2000/Math.max(bmp.width,bmp.height)); if(s>=1 && file.size<=8*1024*1024) return file; const c=document.createElement('canvas'); c.width=Math.round(bmp.width*s); c.height=Math.round(bmp.height*s); c.getContext('2d').drawImage(bmp,0,0,c.width,c.height); const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',0.85)); return blob ? new File([blob],'photo.jpg',{type:'image/jpeg'}) : file; } catch(_) { return file; } }
+    ebForm.addEventListener('submit', async e => { e.preventDefault(); if(ebBusy) return; const bike=ebForm.bike.value.trim(), issue=ebForm.issue.value.trim(), phoneRaw=ebForm.phone.value.trim(), phone=phoneRaw.replace(/\D/g,''); const hasPhoto=ebPhoto.files.length>0;
+      if(!issue){ ebMsg('Tell me what\u2019s going on with the bike.', true); ebForm.issue.focus(); return; }
+      if(!bike && !hasPhoto){ ebMsg('Put the bike name or snap a photo of it.', true); ebForm.bike.focus(); return; }
+      if(EBIKE_ENDPOINT && phone.length<10){ ebMsg('Need a good phone number so I can text you back.', true); ebForm.phone.focus(); return; }
+      if(!EBIKE_ENDPOINT && phoneRaw && phone.length<10){ ebMsg('That phone number looks short. Fix it or leave it blank.', true); ebForm.phone.focus(); return; }
+      if(!EBIKE_ENDPOINT){ ebSmsFallback(''); return; }
+      ebBusy=true; ebSend.disabled=true; ebSend.textContent='Sending\u2026'; ebMsg('Sending\u2026');
+      try {
+        const fd=new FormData(); fd.append('bike',bike); fd.append('issue',issue); fd.append('name',ebForm.name.value.trim()); fd.append('phone',phoneRaw); fd.append('website',ebForm.website.value);
+        if(hasPhoto){ const f=await ebShrink(ebPhoto.files[0]); fd.append('photo', f, f.name||'photo.jpg'); }
+        const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(), 30000);
+        const r=await fetch(EBIKE_ENDPOINT,{method:'POST',body:fd,signal:ctl.signal}); clearTimeout(t);
+        let j=null; try { j=await r.json(); } catch(_) {}
+        if(r.ok && j && j.ok){ ebMsg('Got it, I\u2019ll text you back soon.'); ebForm.reset(); ebPhoto.dispatchEvent(new Event('change')); ebNote.style.display='block'; }
+        else if(r.status===400 && j && j.error){ ebHtml(j.error.replace(/[<>&]/g,'')+' <a href="'+ebSmsHref()+'" style="color:var(--neon);text-decoration:underline">Or text it to me</a>', true); }
+        else { ebSmsFallback('Couldn\u2019t send it online, opening a text instead.'); }
+      } catch(_) { ebSmsFallback('Couldn\u2019t send it online, opening a text instead.'); }
+      finally { ebBusy=false; ebSend.disabled=false; ebSend.textContent='Send'; }
+    });
   </script>
 </body>
 </html>
