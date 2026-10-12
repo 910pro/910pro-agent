@@ -56,6 +56,19 @@
     .tip.on { border-color:var(--neon); box-shadow:0 0 12px rgba(61,240,255,.25); }
     footer { text-align:center; margin-top:28px; color:var(--muted); font-size:12px; }
     footer a { color:var(--neon); }
+    textarea { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; min-height:90px; resize:vertical; }
+    input[type=tel] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
+    #ebike { text-align:left; } #ebike h2, #ebike > p { text-align:center; }
+    #ebike .flabel { display:block; }
+    .cam { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:10px; padding:12px; border:1px dashed var(--neon); color:var(--neon); background:#07121a; font-weight:700; font-size:14px; cursor:pointer; }
+    .cam svg { width:22px; height:22px; }
+    #ebPhoto { position:absolute; width:1px; height:1px; opacity:0; }
+    #ebThumbWrap { display:none; margin-top:10px; text-align:center; }
+    #ebThumbWrap img { max-width:100%; max-height:220px; border:1px solid rgba(61,240,255,.35); }
+    #ebThumbWrap button { margin-top:6px; background:none; border:none; color:var(--muted); font-size:12px; text-decoration:underline; cursor:pointer; font-family:inherit; }
+    #ebNote { display:none; margin-top:10px; font-size:13px; padding:10px; border:1px solid #ffb84d; color:#ffd89a; background:#1c1300; text-align:center; }
+    #ebNote.err { border-color:#ff8a8a; color:#ffb4b4; background:#1c0808; }
+    @media (min-width:900px){ .wrap { max-width:520px; } }
   </style>
 </head>
 <body>
@@ -73,15 +86,7 @@
       <p class="sub">Professional Mobile Device Repair 👨‍💻<br>Buy Sell Trade Electronics ♻️<br>Best Price Guarantee 🫡</p>
       <p class="hero-note"><a href="sms:9108491009">(910) 849-1009</a></p>
     </header>
-    <button class="pay" type="button" id="payOpen">Make a Payment</button>
-    <a class="pay" id="veefaF1" href="https://buy.stripe.com/6oUbJ2aZJdoughw2sG3cc0k" style="display:block;text-align:center;text-decoration:none;margin-top:10px">Veefa F1 — $380</a>
-    <div class="item" id="payBox">
-      <p>Type the amount</p>
-      <input id="payAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
-      <p id="payNote"></p>
-      <div class="row"><a class="btn" id="payGo">Pay</a></div>
-    </div>
-    <section class="list">
+    <section class="list" id="screenTop">
       <article class="item" id="screen">
         <h2>iPhone Screen Repair</h2>
         <p>Which phone do you have?</p>
@@ -126,6 +131,15 @@
         <p id="ipadName"></p>
         <div class="row" id="ipadRow"><button class="btn" type="button" id="ipadBook">Book</button><a class="btn ghost" id="ipadQuote" href="sms:9108491009">Quote</a></div>
       </article>
+    </section>
+    <button class="pay" type="button" id="payOpen" style="margin-top:16px">Make a Payment</button>
+    <div class="item" id="payBox">
+      <p>Type the amount</p>
+      <input id="payAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
+      <p id="payNote"></p>
+      <div class="row"><a class="btn" id="payGo">Pay</a></div>
+    </div>
+    <section class="list">
       <article class="item"><h2>Battery or Charging Port</h2><p>Won’t hold a charge or won’t charge</p><div class="row"><a class="btn" href="sms:9108491009">Book</a></div></article>
       <article class="item" id="recovery">
         <h2>Data Recovery</h2>
@@ -153,6 +167,27 @@
         <p id="drNote"></p>
         <div class="row"><a class="btn" id="drSend" href="sms:9108491009">Send request</a></div>
       </article>
+      <article class="item" id="ebike">
+        <h2>E-Bike Repair</h2>
+        <p>Flats, brakes, wiring, batteries, throttles, won’t power on. Fayetteville / Hope Mills. Tell me what’s going on and I’ll text you back.</p>
+        <form id="ebForm" novalidate>
+          <label class="flabel" for="ebBike">Which bike do you have?</label>
+          <input id="ebBike" name="bike" type="text" placeholder="e.g. Jasion EB5, Veefa F1, Hiboy, Gotrax" autocomplete="off" maxlength="120" />
+          <label class="flabel" for="ebIssue">What issue are you having?</label>
+          <textarea id="ebIssue" name="issue" placeholder="e.g. Dies after a couple miles, back brake squeals, display shows E-10" maxlength="2000"></textarea>
+          <label class="flabel" for="ebPhoto">Not sure which model? Send a picture</label>
+          <label class="cam" for="ebPhoto"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg><span id="ebCamText">Take or pick a photo</span></label>
+          <input id="ebPhoto" name="photo" type="file" accept="image/*" capture="environment" />
+          <div id="ebThumbWrap"><img id="ebThumb" alt="Your bike photo" /><br><button type="button" id="ebClear">Remove photo</button></div>
+          <label class="flabel" for="ebName">Name</label>
+          <input id="ebName" name="name" type="text" placeholder="Your name" autocomplete="name" maxlength="80" />
+          <label class="flabel" for="ebPhone">Phone (optional)</label>
+          <input id="ebPhone" name="phone" type="tel" placeholder="Only if it’s different from the one you text from" autocomplete="tel" inputmode="tel" maxlength="20" />
+          <div id="ebNote"></div>
+          <div class="row"><button class="btn" type="submit" id="ebSend">Text it to me</button><a class="btn ghost" href="sms:9108491009">Just text me</a></div>
+          <p style="margin-top:8px;font-size:12px;text-align:center">Or text (910) 849-1009</p>
+        </form>
+      </article>
       <article class="item"><h2>IMEI / Blacklist Check</h2><p>Check a device before you buy or sell</p><div class="row"><a class="btn" href="https://buy.stripe.com/14A6oI4Bl706fds8R43cc01">Order</a></div></article>
       <article class="item"><h2>Basic Clean</h2><p>Exterior Includes charging port and speakers</p><div class="row"><a class="btn" href="https://buy.stripe.com/dRm00kffZbgm2qG0ky3cc02">Order</a></div></article>
       <article class="item"><h2>Pro Clean</h2><p>Remove inner debris prevent corrosion water damage treatment all internals including connectors</p><div class="row"><a class="btn" href="https://buy.stripe.com/aFafZi4Bldou2qGgjw3cc03">Order</a></div></article>
@@ -169,6 +204,11 @@
           <button class="tip" type="button" data-amt="1000">$1,000</button>
         </div>
         <div class="row"><a class="btn" id="tipPay" href="https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08">Donate $1</a></div>
+      </article>
+      <article class="item" id="maintmgmt">
+        <h2>Maintenance/Management</h2>
+        <p>Phones, computers, Wi-Fi and printers for small offices and shops. I can usually fix it remotely, and if not, I'll come out.</p>
+        <div class="row"><a class="btn" href="sms:9108491009?&body=Hi%2C%20I%27m%20interested%20in%20maintenance%2Fmanagement%20for%20my%20office%2Fshop.">Text</a><a class="btn ghost" href="tel:9108491009">Call</a></div>
       </article>
     </section>
     <footer>
@@ -280,6 +320,15 @@
     ipadModel.addEventListener('input', ipadSync);
     model.addEventListener('change', sync);
     otherModel.addEventListener('input', sync);
+    // ---- E-bike repair form: opens a prefilled text to 910-849-1009 (no backend yet) ----
+    const EBIKE_SMS = 'sms:9108491009?&body='; // same format as the rest of the site; works on iOS and Android
+    const ebForm = document.getElementById('ebForm'), ebPhoto = document.getElementById('ebPhoto'), ebThumb = document.getElementById('ebThumb'), ebThumbWrap = document.getElementById('ebThumbWrap'), ebCamText = document.getElementById('ebCamText'), ebNote = document.getElementById('ebNote');
+    let ebUrl = null;
+    function ebMsg(t, err){ ebNote.textContent=t; ebNote.className=err?'err':''; ebNote.style.display='block'; }
+    ebPhoto.addEventListener('change', () => { const f=ebPhoto.files[0]; if(ebUrl){ URL.revokeObjectURL(ebUrl); ebUrl=null; } if(!f){ ebThumbWrap.style.display='none'; ebCamText.textContent='Take or pick a photo'; return; } if(f.type && !/^image\//.test(f.type)){ ebMsg('That file isn\u2019t a photo.', true); ebPhoto.value=''; return; } ebUrl=URL.createObjectURL(f); ebThumb.src=ebUrl; ebThumbWrap.style.display='block'; ebCamText.textContent='Change photo'; ebNote.style.display='none'; });
+    document.getElementById('ebClear').addEventListener('click', () => { ebPhoto.value=''; ebPhoto.dispatchEvent(new Event('change')); });
+    function ebSmsHref(){ const bike=ebForm.bike.value.trim(), issue=ebForm.issue.value.trim(), name=ebForm.name.value.trim(), phone=ebForm.phone.value.trim(); let msg='E-bike repair: '+(bike||'not sure, sending a photo')+'. Issue: '+issue+'.'; if(name) msg+=' Name: '+name+'.'; if(phone) msg+=' Call back: '+phone+'.'; return EBIKE_SMS+encodeURIComponent(msg); }
+    ebForm.addEventListener('submit', e => { e.preventDefault(); const bike=ebForm.bike.value.trim(), issue=ebForm.issue.value.trim(), phoneRaw=ebForm.phone.value.trim(), phone=phoneRaw.replace(/\D/g,''); const hasPhoto=ebPhoto.files.length>0; if(!issue){ ebMsg('Tell me what\u2019s going on with the bike.', true); ebForm.issue.focus(); return; } if(!bike && !hasPhoto){ ebMsg('Put the bike name or snap a photo of it.', true); ebForm.bike.focus(); return; } if(phoneRaw && phone.length<10){ ebMsg('That phone number looks short. Fix it or leave it blank.', true); ebForm.phone.focus(); return; } const href=ebSmsHref(); if(hasPhoto){ ebNote.className=''; ebNote.innerHTML='Attach your photo in the text that opens. <a href="'+href+'" style="color:var(--neon);text-decoration:underline">Didn\u2019t open? Tap here</a>'; ebNote.style.display='block'; setTimeout(()=>{ window.location.href=href; }, 1200); } else { ebNote.style.display='none'; window.location.href=href; } });
   </script>
 </body>
 </html>
