@@ -28,12 +28,10 @@
     .row { display:flex; gap:8px; margin-top:12px; }
     .btn { flex:1; display:flex; align-items:center; justify-content:center; padding:11px 12px; font-weight:700; font-size:13px; background:linear-gradient(180deg,#2ad6ff,#1296c8); color:#041018; border:1px solid #7af6ff; text-align:center; font-family:inherit; cursor:pointer; }
     select, input[type=text], input[type=number] { width:100%; margin-top:10px; background:#05090d; border:1px solid rgba(61,240,255,.35); color:var(--text); padding:11px 12px; font-size:15px; font-family:inherit; }
-    #otherWrap, #payBox, #ipadRow { display:none; }
+    #otherWrap, #ipadRow { display:none; }
     .btn.ghost { background:transparent; color:var(--neon); border:1px solid var(--neon); }
     @media (max-width:300px){ #ipadRow { flex-direction:column; } }
     #ipadName { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:15px; min-height:20px; }
-    #payBox.open { display:block; margin-bottom:8px; }
-    #payNote { display:none; color:#ffb4b4; font-size:12px; margin-top:8px; }
     #screenPrice { margin-top:10px; font-family:Orbitron,sans-serif; color:var(--neon); font-size:22px; min-height:28px; }
     #cal { display:none; margin-top:12px; text-align:center; }
     #cal.open { display:block; }
@@ -89,13 +87,7 @@
       <p class="sub">Professional Mobile Device Repair 👨‍💻<br>Buy Sell Trade Electronics ♻️<br>Best Price Guarantee 🫡</p>
       <p class="hero-note"><a href="sms:9108491009">(910) 849-1009</a></p>
     </header>
-    <button class="pay" type="button" id="payOpen">Make a Payment</button>
-    <div class="item" id="payBox">
-      <p>Type the amount</p>
-      <input id="payAmt" type="number" min="1" step="1" inputmode="decimal" placeholder="Amount" />
-      <p id="payNote"></p>
-      <div class="row"><a class="btn" id="payGo">Pay</a></div>
-    </div>
+    <a class="pay" id="payOpen" href="https://buy.stripe.com/eVq4gA0l5gAGghw8R43cc0f" style="font-size:13.3333px">Make a Payment</a>
     <section class="list" id="screenTop">
       <article class="item" id="screen">
         <h2>iPhone Screen Repair</h2>
@@ -246,11 +238,6 @@
     const depWrap = document.getElementById('depWrap');
     const tipPay = document.getElementById('tipPay');
     const DONATE = { 1:'https://donate.stripe.com/3cIaEY1p9fwC2qGgjw3cc08', 10:'https://donate.stripe.com/3cI6oI9VFbgm6GW4AO3cc0h', 100:'https://donate.stripe.com/eVq5kE1p93NUghw7N03cc0i', 1000:'https://donate.stripe.com/eVq00kebVfwC0iyaZc3cc0j' };
-    const payOpen = document.getElementById('payOpen');
-    const payBox = document.getElementById('payBox');
-    const payAmt = document.getElementById('payAmt');
-    const payGo = document.getElementById('payGo');
-    const payNote = document.getElementById('payNote');
     let pickedDay = null, pickedSlot = null;
     const names = ['Su','Mo','Tu','We','Th','Fr','Sa'];
     function label(h){ const end=h+1; const a=h>12?h-12:h; const b=end>12?end-12:end; return a+(h>=12?'pm':'am')+'\u2013'+b+(end>=12?'pm':'am'); }
@@ -262,10 +249,6 @@
     function guess(text){ const t=(text||'').toLowerCase(); if(!t.trim()) return null; if(t.includes('air')) return 200; if(t.includes('17 pro')) return 140; if(t.includes('17')) return 110; if(t.includes('16e')||t.includes('16 e')) return 90; if(t.includes('16 pro')) return 130; if(t.includes('16')) return 100; if(t.includes('15 pro')) return 100; if(t.includes('15')) return 80; if(t.includes('14 pro')) return 90; if(t.includes('14')) return 80; if(t.includes('13 pro')||t.includes('12 pro')) return 80; if(t.includes('13')||t.includes('12')) return 70; if(t.includes('11 pro')||t.includes('xs max')) return 70; if(t.includes('11')||t.includes('xr')||t.includes('xs')||t.includes('iphone x')) return 65; if(t.includes('se')||/\b[78]\b/.test(t)) return 55; return null; }
     function sync(){ const isOther=model.value==='other'; otherWrap.style.display=isOther?'block':'none'; if(ipadJob){ const d=depositFor(); out.textContent='iPad \u00b7 final price confirmed by text'; pay.textContent=depLabel(d); pay.href=d.url; depWrap.style.display='block'; } else if(isOther) setPay(guess(otherModel.value), otherModel.value.trim()?'Text this model to book':''); else setPay(prices[model.value]||null,''); updateNote(); }
     function updateNote(){ const dep=deposit(); const when=pickedDay&&pickedSlot!=null ? names[pickedDay.getDay()]+' '+pickedDay.getDate()+' '+label(pickedSlot) : ''; if(when&&dep){ calNote.textContent=when+' \u00b7 '+depText(dep)+' locks this hour and the free protector. It comes off your total.'; pay.textContent=depLabel(dep); pay.href=dep.url; } else { calNote.textContent='Your deposit locks your hour and the free protector. It comes off your total.'; } }
-    function setPayAmt(){ const n=Math.round(Number(payAmt.value)||0); if(n<1||n>500){ payGo.textContent='Pay'; payGo.removeAttribute('href'); payNote.style.display=n?'block':'none'; payNote.textContent=n?'Online payments are $1 to $500. Text (910) 849-1009 for larger amounts.':''; return; } payNote.style.display='block'; payNote.textContent='Enter $'+n+' on the next screen.'; payGo.textContent='Pay $'+n; payGo.href=PAY_ANY; }
-    payOpen.addEventListener('click', () => { payBox.classList.add('open'); payAmt.focus(); });
-    payAmt.addEventListener('input', setPayAmt);
-    payGo.addEventListener('click', e => { if(!payGo.getAttribute('href')){ e.preventDefault(); payAmt.focus(); } });
     document.getElementById('tipAmounts').addEventListener('click', e => { const b=e.target.closest('.tip'); if(!b) return; [...document.querySelectorAll('.tip')].forEach(x=>x.classList.remove('on')); b.classList.add('on'); const n=Number(b.dataset.amt); tipPay.textContent='Donate '+b.textContent; tipPay.href=DONATE[n]; });
     function drawDays(){ daysEl.innerHTML=''; const start=new Date(); start.setHours(0,0,0,0); for(let i=0;i<14;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const b=document.createElement('button'); b.type='button'; b.className='day'; b.innerHTML='<span class="dow">'+names[d.getDay()]+'</span><span class="num">'+d.getDate()+'</span>'; b.addEventListener('click',()=>{ pickedDay=d; pickedSlot=null; [...daysEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); drawSlots(); updateNote(); }); daysEl.appendChild(b); } }
     function drawSlots(){ slotsEl.innerHTML=''; if(!pickedDay) return; hoursFor(pickedDay).forEach(h=>{ const b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=label(h); b.addEventListener('click',()=>{ pickedSlot=h; [...slotsEl.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); updateNote(); }); slotsEl.appendChild(b); }); }
